@@ -58,6 +58,8 @@ jobs:
             aws ecr get-login-password --region ${{ env.AWS_REGION }} \
               | docker login --username AWS --password-stdin ${{ secrets.ECR_REGISTRY }}
 
+            export ECR_REGISTRY=${{ secrets.ECR_REGISTRY }}
+
             cd ~/rootresume
 
             docker compose -f docker-compose.prod.yml --profile almorz pull
