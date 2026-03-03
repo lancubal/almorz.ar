@@ -1,0 +1,114 @@
+<div class="stats-container">
+  <div class="stats-header">
+    <h2>{{ showGlobal() ? '🌐 Stats globales' : '📊 Mis estadísticas' }}</h2>
+    <div class="toggle-group" role="group" aria-label="Modo de estadísticas">
+      <button class="toggle-btn" [class.toggle-btn--active]="!showGlobal()"
+        (click)="showGlobal.set(false)" [attr.aria-pressed]="!showGlobal()">
+        Mis visitas
+      </button>
+      <button class="toggle-btn" [class.toggle-btn--active]="showGlobal()"
+        (click)="showGlobal.set(true)" [attr.aria-pressed]="showGlobal()">
+        Global
+      </button>
+    </div>
+  </div>
+
+  @if (entries().length === 0) {
+    <div class="empty">
+      <span class="empty-icon" aria-hidden="true">📊</span>
+      <p>Todavía no hay visitas para mostrar.</p>
+    </div>
+  } @else {
+    <!-- Summary row -->
+    <div class="summary-row" role="region" aria-label="Resumen">
+      <div class="summary-card">
+        <span class="summary-value">{{ summary()!.count }}</span>
+        <span class="summary-label">Visitas</span>
+      </div>
+      <div class="summary-card">
+        <span class="summary-value">{{ summary()!.avgRating }}</span>
+        <span class="summary-label">Rating prom.</span>
+      </div>
+      <div class="summary-card">
+        <span class="summary-value">${{ summary()!.avgCost }}</span>
+        <span class="summary-label">Gasto prom.</span>
+      </div>
+      <div class="summary-card">
+        <span class="summary-value">${{ summary()!.totalCost }}</span>
+        <span class="summary-label">Total gastado</span>
+      </div>
+    </div>
+
+    <!-- Monthly spend -->
+    <section class="stat-section" aria-label="Gasto mensual">
+      <h3 class="section-title">💸 Gasto mensual</h3>
+      <div class="bar-chart" role="list">
+        @for (bar of monthlySpend(); track bar.label) {
+          <div class="bar-item" role="listitem">
+            <div class="bar-track" [attr.aria-label]="bar.label + ': $' + formatCost(bar.total)">
+              <div class="bar-fill" [style.height.%]="barPct(bar.total, maxMonthlySpend())"></div>
+            </div>
+            <div class="bar-value">
+              @if (bar.total > 0) { ${{ formatCost(bar.total) }} }
+              @else { — }
+            </div>
+            <div class="bar-label">{{ bar.label }}</div>
+          </div>
+        }
+      </div>
+    </section>
+
+    <!-- Top places -->
+    @if (topPlaces().length > 0) {
+      <section class="stat-section" aria-label="Lugares más visitados">
+        <h3 class="section-title">🏆 Lugares más visitados</h3>
+        <div class="place-list">
+          @for (place of topPlaces(); track place.name; let idx = $index) {
+            <div class="place-row">
+              <span class="place-rank" aria-hidden="true">{{ idx + 1 }}</span>
+              <div class="place-info">
+                <div class="place-name">{{ place.name }}</div>
+                <div class="place-bar-track">
+                  <div class="place-bar-fill"
+                    [style.width.%]="barPct(place.count, maxTopCount())"
+                    [style.background]="ratingColor(place.avgRating)">
+                  </div>
+                </div>
+              </div>
+              <div class="place-meta">
+                <span class="place-visits" [attr.aria-label]="place.count + ' visitas'">{{ place.count }}×</span>
+                <span class="place-rating" [style.color]="ratingColor(place.avgRating)"
+                  [attr.aria-label]="'Rating ' + place.avgRating">★ {{ place.avgRating }}</span>
+                <span class="place-cost" [attr.aria-label]="'Gasto promedio $' + formatCost(place.avgCost)">${{ formatCost(place.avgCost) }}</span>
+              </div>
+            </div>
+          }
+        </div>
+      </section>
+    }
+
+    <!-- Tag stats -->
+    @if (tagStats().length > 0) {
+      <section class="stat-section" aria-label="Rating por tag">
+        <h3 class="section-title">🏷️ Rating por tag</h3>
+        <div class="tag-grid">
+          @for (ts of tagStats(); track ts.tag) {
+            <div class="tag-stat-card">
+              <div class="tag-stat-name">{{ ts.tag }}</div>
+              <div class="tag-stat-rating" [style.color]="ratingColor(ts.avgRating)">
+                {{ ts.avgRating }}
+              </div>
+              <div class="tag-stat-bar-track">
+                <div class="tag-stat-bar-fill"
+                  [style.width.%]="(ts.avgRating / 10) * 100"
+                  [style.background]="ratingColor(ts.avgRating)">
+                </div>
+              </div>
+              <div class="tag-stat-count">{{ ts.count }} visita{{ ts.count !== 1 ? 's' : '' }}</div>
+            </div>
+          }
+        </div>
+      </section>
+    }
+  }
+</div>
