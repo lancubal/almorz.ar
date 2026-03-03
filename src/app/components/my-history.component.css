@@ -1,0 +1,111 @@
+.history-container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+h2 {
+  color: #333;
+  margin: 0 0 1.5rem;
+  font-size: 1.4rem;
+}
+
+.summary-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.summary-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.25rem 1rem;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.summary-value {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #667eea;
+  display: block;
+}
+
+.summary-label {
+  font-size: 0.78rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #999;
+}
+
+.empty .icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.visit-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.visit-item {
+  background: white;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.visit-place {
+  font-weight: 700;
+  color: #1a1a1a;
+  font-size: 1rem;
+}
+
+.visit-date {
+  font-size: 0.8rem;
+  color: #999;
+  margin-top: 0.15rem;
+}
+
+.visit-meta {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.rating {
+  background: #fff8e1;
+  color: #f57c00;
+  border-radius: 8px;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.cost {
+  background: #e8f5e9;
+  color: #388e3c;
+  border-radius: 8px;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+@media (max-width: 480px) {
+  .summary-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

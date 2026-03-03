@@ -1,33 +1,52 @@
+@if (!currentUser() && userIsReady()) {
+  <app-user-setup (done)="onUserSetupDone()" />
+}
+
 <div class="app-container">
   <header class="app-header">
-    <h1>🍽️ Almorz.ar</h1>
-    <p class="app-subtitle">¿Dónde almorzamos hoy?</p>
+    <div class="header-top">
+      <div>
+        <h1>🍽️ Almorz.ar</h1>
+        <p class="app-subtitle">¿Dónde almorzamos hoy?</p>
+      </div>
+      @if (currentUser()) {
+        <div class="user-chip">
+          <span class="user-name" aria-label="Usuario actual">{{ currentUser()!.displayName }}</span>
+          <button class="logout-btn" type="button" (click)="logout()" aria-label="Cambiar usuario">Cambiar</button>
+        </div>
+      }
+    </div>
   </header>
 
-  <nav class="app-nav">
-    <button class="nav-tab" [class.active]="activeTab() === 'roulette'" (click)="setActiveTab('roulette')"
-      type="button">
+  <nav class="app-nav" aria-label="Navegación principal">
+    <button class="nav-tab" [class.active]="activeTab() === 'roulette'" (click)="setActiveTab('roulette')" type="button">
       🎰 Ruleta
     </button>
     <button class="nav-tab" [class.active]="activeTab() === 'visits'" (click)="setActiveTab('visits')" type="button">
-      📝 Registrar Visita
+      📝 Registrar
     </button>
-    <button class="nav-tab" [class.active]="activeTab() === 'places'" (click)="setActiveTab('places')" type="button">
-      📍 Lugares
+    <button class="nav-tab" [class.active]="activeTab() === 'history'" (click)="setActiveTab('history')" type="button">
+      📋 Mi Historial
+    </button>
+    <button class="nav-tab" [class.active]="activeTab() === 'admin'" (click)="setActiveTab('admin')" type="button">
+      🔧 Admin
     </button>
   </nav>
 
   <main class="app-main">
     @switch(activeTab()) {
       @case('roulette') {
-      <app-roulette />
+        <app-roulette />
       }
       @case('visits') {
-      <app-visit-logger />
+        <app-visit-logger />
       }
-      @case('places') {
-      <app-places-manager />
+      @case('history') {
+        <app-my-history />
       }
+      @case('admin') {
+        <app-admin />
       }
+    }
   </main>
 </div>

@@ -70,8 +70,7 @@
         <div class="visits-list">
           @for(place of places(); track place.id) {
             @if(place.visits.length > 0) {
-              <blade
-                for|%20(visit%20of%20place.visits.slice().reverse().slice(0%2C%203)%3B%20track%20%24index)%20%7B%0D>
+              @for(visit of place.visits.slice().reverse().slice(0, 3); track $index) {
                 <div class="visit-item">
                   <div class="visit-header">
                     <strong>{{ place.name }}</strong>
@@ -82,9 +81,9 @@
                     <span class="visit-rating">{{ visit.rating }}/10 ⭐</span>
                   </div>
                 </div>
-                }
-                }
-                }
+              }
+            }
+          }
         </div>
         } @else {
         <p class="no-visits">No hay visitas registradas aún.</p>

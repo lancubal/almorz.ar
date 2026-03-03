@@ -1,3 +1,14 @@
+export interface User {
+  id: string;          // slug: "agustin", "mica"
+  displayName: string;
+  createdAt: string;
+}
+
+export interface UserSettings {
+  id: string;          // = userId
+  lastSelectedId: string | null;
+}
+
 export interface Place {
   id: string;
   name: string;
@@ -11,8 +22,15 @@ export interface Visit {
   date: Date;
   cost: number;
   rating: number; // 1-10
+  userId: string;
 }
 
 export interface PlaceWithWeight extends Place {
   weight: number;
+}
+
+export interface VisitEntry {
+  placeName: string;
+  placeId: string;
+  visit: Visit;
 }

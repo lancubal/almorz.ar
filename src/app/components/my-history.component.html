@@ -1,0 +1,40 @@
+<div class="history-container">
+  <h2>📋 Mi historial</h2>
+
+  @if (entries().length === 0) {
+    <div class="empty">
+      <span class="icon" aria-hidden="true">🍽️</span>
+      <p>Todavía no registraste ninguna visita.</p>
+    </div>
+  } @else {
+    <div class="summary-row" role="region" aria-label="Resumen de visitas">
+      <div class="summary-card">
+        <span class="summary-value">{{ entries().length }}</span>
+        <span class="summary-label">Visitas totales</span>
+      </div>
+      <div class="summary-card">
+        <span class="summary-value">{{ avgRating() }}</span>
+        <span class="summary-label">Rating promedio</span>
+      </div>
+      <div class="summary-card">
+        <span class="summary-value">$&thinsp;{{ avgCost() }}</span>
+        <span class="summary-label">Gasto promedio</span>
+      </div>
+    </div>
+
+    <div class="visit-list" role="list">
+      @for (entry of entries(); track $index) {
+        <div class="visit-item" role="listitem">
+          <div>
+            <div class="visit-place">{{ entry.placeName }}</div>
+            <div class="visit-date">{{ formatDate(entry.visit.date) }}</div>
+          </div>
+          <div class="visit-meta">
+            <span class="rating" [attr.aria-label]="'Rating ' + entry.visit.rating">⭐ {{ entry.visit.rating }}/10</span>
+            <span class="cost" [attr.aria-label]="'Costo $' + entry.visit.cost">${{ entry.visit.cost }}</span>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>
