@@ -119,12 +119,14 @@ export class PlacesManagerComponent {
   }
 
   protected isBlacklisted(place: Place): boolean {
-    return !!place.blacklistedUntil && new Date(place.blacklistedUntil) > new Date();
+    const bl = this.placesService.userBlacklist();
+    return !!bl[place.id] && new Date(bl[place.id]) > new Date();
   }
 
   protected blacklistExpiry(place: Place): string {
-    if (!place.blacklistedUntil) return '';
-    return new Date(place.blacklistedUntil).toLocaleDateString('es-AR', { day: 'numeric', month: 'short' });
+    const bl = this.placesService.userBlacklist();
+    if (!bl[place.id]) return '';
+    return new Date(bl[place.id]).toLocaleDateString('es-AR', { day: 'numeric', month: 'short' });
   }
 
   protected startBlacklist(id: string): void {

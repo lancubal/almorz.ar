@@ -15,10 +15,13 @@ export class PlacesService {
   private readonly placesSignal = signal<Place[]>([]);
   private readonly lastSelectedIdSignal = signal<string | null>(null);
   private readonly antiRepeatDaysSignal = signal(5);
+  private readonly userBlacklistSignal = signal<Record<string, string>>({});
   readonly isLoading = signal(false);
   readonly apiError = signal(false);
 
   readonly antiRepeatDays = this.antiRepeatDaysSignal.asReadonly();
+  /** Per-user blacklist: placeId → ISO expiry. Reactive signal updated on every change. */
+  readonly userBlacklist = this.userBlacklistSignal.asReadonly();
 
   // Public readonly surfaces
   readonly places = this.placesSignal.asReadonly();
@@ -42,6 +45,7 @@ export class PlacesService {
         this.loadUserSettings(user.id);
       } else {
         this.lastSelectedIdSignal.set(null);
+        this.userBlacklistSignal.set({});
       }
     });
   }
@@ -76,10 +80,13 @@ export class PlacesService {
   loadUserSettings(userId: string): void {
     this.http.get<UserSettings>(`${API}/settings/${userId}`).pipe(
       catchError(() =>
-        this.http.post<UserSettings>(`${API}/settings`, { id: userId, lastSelectedId: null })
+        this.http.post<UserSettings>(`${API}/settings`, { id: userId, lastSelectedId: null, blacklist: {} })
       ),
       catchError(() => of(null)),
-    ).subscribe(s => this.lastSelectedIdSignal.set(s?.lastSelectedId ?? null));
+    ).subscribe(s => {
+      this.lastSelectedIdSignal.set(s?.lastSelectedId ?? null);
+      this.userBlacklistSignal.set(s?.blacklist ?? {});
+    });
   }
 
   private refreshPlaces(): Observable<void> {
@@ -108,7 +115,6 @@ export class PlacesService {
       visits: [],
       lastVisitDate: null,
       createdAt: new Date(),
-      blacklistedUntil: null,
     };
     return this.http.post<Place>(`${API}/places`, newPlace).pipe(
       switchMap(() => this.refreshPlaces()),
@@ -160,31 +166,41 @@ export class PlacesService {
 
   // --- Weight & selection logic ----------------------------------------------
 
-  /** Places eligible for the normal spin (excludes last selected, blacklisted, and recent anti-repeat). */
+  /** Places eligible for the normal spin (excludes last selected, user-blacklisted, and recent anti-repeat). */
   getEligiblePlaces(): PlaceWithWeight[] {
     const lastId = this.lastSelectedIdSignal();
     const now = new Date();
     const antiDays = this.antiRepeatDaysSignal();
     const cutoff = antiDays > 0 ? new Date(Date.now() - antiDays * 86_400_000) : null;
+    const blacklist = this.userBlacklistSignal();
     return this.placesWithWeights().filter(p => {
       if (p.id === lastId) return false;
       if (p.weight <= 0) return false;
-      if (p.blacklistedUntil && new Date(p.blacklistedUntil) > now) return false;
+      if (blacklist[p.id] && new Date(blacklist[p.id]) > now) return false;
       if (cutoff && p.lastVisitDate && new Date(p.lastVisitDate) > cutoff) return false;
       return true;
     });
   }
 
-  blacklistPlace(id: string, days: number): Observable<void> {
+  blacklistPlace(placeId: string, days: number): Observable<void> {
+    const userId = this.userService.currentUser()?.id;
+    if (!userId) return of(void 0);
     const until = new Date(Date.now() + days * 86_400_000).toISOString();
-    return this.http.patch<Place>(`${API}/places/${id}`, { blacklistedUntil: until }).pipe(
-      switchMap(() => this.refreshPlaces()),
+    const updated = { ...this.userBlacklistSignal(), [placeId]: until };
+    return this.http.patch<UserSettings>(`${API}/settings/${userId}`, { blacklist: updated }).pipe(
+      tap(() => this.userBlacklistSignal.set(updated)),
+      map(() => void 0),
     );
   }
 
-  removeFromBlacklist(id: string): Observable<void> {
-    return this.http.patch<Place>(`${API}/places/${id}`, { blacklistedUntil: null }).pipe(
-      switchMap(() => this.refreshPlaces()),
+  removeFromBlacklist(placeId: string): Observable<void> {
+    const userId = this.userService.currentUser()?.id;
+    if (!userId) return of(void 0);
+    const updated = { ...this.userBlacklistSignal() };
+    delete updated[placeId];
+    return this.http.patch<UserSettings>(`${API}/settings/${userId}`, { blacklist: updated }).pipe(
+      tap(() => this.userBlacklistSignal.set(updated)),
+      map(() => void 0),
     );
   }
 

@@ -209,11 +209,13 @@
   "settings": [
     {
       "id": "1",
-      "lastSelectedId": "b8db2ebf-cf64-4cf4-988b-5f1536f058d4"
+      "lastSelectedId": "b8db2ebf-cf64-4cf4-988b-5f1536f058d4",
+      "blacklist": {}
     },
     {
       "id": "agus",
-      "lastSelectedId": "49332387-c3ea-487e-becd-60e74200c2bd"
+      "lastSelectedId": "49332387-c3ea-487e-becd-60e74200c2bd",
+      "blacklist": {}
     }
   ],
   "appConfig": [

@@ -7,6 +7,8 @@ export interface User {
 export interface UserSettings {
   id: string;          // = userId
   lastSelectedId: string | null;
+  /** placeId → ISO expiry date. Place is excluded from this user's wheel until that date. */
+  blacklist?: Record<string, string>;
 }
 
 export interface Place {
@@ -16,8 +18,6 @@ export interface Place {
   visits: Visit[];
   lastVisitDate: Date | null;
   createdAt: Date;
-  /** ISO date string — place is excluded from the wheel until this date. */
-  blacklistedUntil?: string | null;
 }
 
 export interface Visit {
