@@ -58,7 +58,7 @@ jobs:
             aws ecr get-login-password --region ${{ env.AWS_REGION }} \
               | docker login --username AWS --password-stdin ${{ secrets.ECR_REGISTRY }}
 
-            docker compose -f docker-compose.prod.yml pull almorz-web almorz-api
-            docker compose -f docker-compose.prod.yml up -d almorz-web almorz-api
+            docker compose -f docker-compose.prod.yml --profile almorz pull
+            docker compose -f docker-compose.prod.yml --profile almorz up -d
 
             docker image prune -f

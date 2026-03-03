@@ -58,9 +58,15 @@
           "cost": 7500,
           "rating": 8,
           "userId": "agus"
+        },
+        {
+          "date": "2026-03-03T18:59:40.576Z",
+          "cost": 13100,
+          "rating": 7,
+          "userId": "facu"
         }
       ],
-      "lastVisitDate": "2026-03-03T18:16:16.933Z",
+      "lastVisitDate": "2026-03-03T18:59:40.576Z",
       "createdAt": "2026-03-03T13:33:44.920Z"
     },
     {
@@ -204,6 +210,24 @@
       "visits": [],
       "lastVisitDate": null,
       "createdAt": "2026-03-03T13:51:12.535Z"
+    },
+    {
+      "id": "b29765b3-b986-4c7f-88bf-0ed6a4a20b6b",
+      "name": "Pick and Peck",
+      "tags": [
+        "Sano",
+        "Vianda"
+      ],
+      "visits": [
+        {
+          "date": "2026-03-03T18:58:42.302Z",
+          "cost": 8500,
+          "rating": 10,
+          "userId": "eze"
+        }
+      ],
+      "lastVisitDate": "2026-03-03T18:58:42.302Z",
+      "createdAt": "2026-03-03T18:58:26.190Z"
     }
   ],
   "users": [
@@ -211,6 +235,16 @@
       "id": "agus",
       "displayName": "Agus",
       "createdAt": "2026-03-03T14:17:38.563Z"
+    },
+    {
+      "id": "facu",
+      "displayName": "Facu",
+      "createdAt": "2026-03-03T18:57:12.954Z"
+    },
+    {
+      "id": "eze",
+      "displayName": "Eze",
+      "createdAt": "2026-03-03T18:57:20.601Z"
     }
   ],
   "settings": [
@@ -222,6 +256,16 @@
     {
       "id": "agus",
       "lastSelectedId": "27ac8b31-cf5f-4c18-b60a-113c7de05b8d",
+      "blacklist": {}
+    },
+    {
+      "id": "facu",
+      "lastSelectedId": null,
+      "blacklist": {}
+    },
+    {
+      "id": "eze",
+      "lastSelectedId": null,
       "blacklist": {}
     }
   ],
