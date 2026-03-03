@@ -52,8 +52,15 @@
       "tags": [
         "Ensalada"
       ],
-      "visits": [],
-      "lastVisitDate": null,
+      "visits": [
+        {
+          "date": "2026-03-03T18:16:16.933Z",
+          "cost": 7500,
+          "rating": 8,
+          "userId": "agus"
+        }
+      ],
+      "lastVisitDate": "2026-03-03T18:16:16.933Z",
       "createdAt": "2026-03-03T13:33:44.920Z"
     },
     {
