@@ -1,0 +1,100 @@
+<div class="places-manager">
+  <div class="header">
+    <h2>Lugares de Comida</h2>
+    <button class="btn btn-primary" (click)="showAddForm()" type="button" [disabled]="isFormVisible()">
+      + Agregar Lugar
+    </button>
+  </div>
+
+  @if(isFormVisible()) {
+    <div class="form-card">
+      <h3>{{ editingPlace() ? 'Editar Lugar' : 'Nuevo Lugar' }}
+      </h3>
+
+      <form [formGroup]="placeForm" (ngSubmit)="submitForm()">
+        <div class="form-group">
+          <label for="name">Nombre del lugar *</label>
+          <input type="text" id="name" formControlName="name" placeholder="Ej: La Esquina del Bife"
+            class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label for="tags">Tags (separados por coma)</label>
+          <input type="text" id="tags" formControlName="tags" placeholder="Ej: parrilla, económico, rápido"
+            class="form-control">
+          <small class="form-hint">Usa tags para categorizar: tipo de comida, precio, etc.</small>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" (click)="cancelForm()">
+            Cancelar
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="!placeForm.valid">
+            {{ editingPlace() ? 'Guardar' : 'Crear' }}
+          </button>
+        </div>
+      </form>
+    </div>
+    }
+
+    @if(places().length === 0) {
+      <div class="empty-state">
+        <p>No hay lugares agregados aún.</p>
+        <p>Comienza agregando los lugares cercanos a tu oficina.</p>
+      </div>
+      } @else {
+      <div class="places-grid">
+        @for(place of places(); track place.id) {
+          <div class="place-card">
+            <div class="place-header">
+              <h3>{{ place.name }}</h3>
+              <div class="place-actions">
+                <button class="btn-icon" (click)="showEditForm(place)" type="button" aria-label="Editar lugar">
+                  ✏️
+                </button>
+                <button class="btn-icon" (click)="deletePlace(place.id)" type="button" aria-label="Eliminar lugar">
+                  🗑️
+                </button>
+              </div>
+            </div>
+
+            @if(place.tags.length > 0) {
+              <div class="tags">
+                @for(tag of place.tags; track tag) {
+                  <span class="tag">{{ tag }}</span>
+                  }
+              </div>
+              }
+
+              <div class="place-stats">
+                <div class="stat">
+                  <span class="stat-label">Visitas:</span>
+                  <span class="stat-value">{{ place.visits.length }}</span>
+                </div>
+
+                @if(getAverageRating(place); as avgRating) {
+                  <div class="stat">
+                    <span class="stat-label">Rating:</span>
+                    <span class="stat-value">{{ avgRating.toFixed(1) }}/10</span>
+                  </div>
+                  }
+
+                  @if(getAverageCost(place); as avgCost) {
+                    <div class="stat">
+                      <span class="stat-label">Gasto promedio:</span>
+                      <span class="stat-value">${{ avgCost.toFixed(0) }}</span>
+                    </div>
+                    }
+
+                    @if(place.lastVisitDate) {
+                      <div class="stat">
+                        <span class="stat-label">Última visita:</span>
+                        <span class="stat-value">{{ place.lastVisitDate.toLocaleDateString() }}</span>
+                      </div>
+                      }
+              </div>
+          </div>
+          }
+      </div>
+      }
+</div>

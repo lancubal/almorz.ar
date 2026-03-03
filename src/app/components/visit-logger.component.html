@@ -1,0 +1,94 @@
+<div class="visit-logger">
+  <h2>Registrar Visita</h2>
+
+  @if(places().length === 0) {
+    <div class="empty-state">
+      <p>No hay lugares disponibles.</p>
+      <p>Primero agrega lugares en la pestaña "Lugares".</p>
+    </div>
+    } @else {
+    <div class="form-card">
+      @if(showSuccess()) {
+        <div class="success-message">
+          ✅ Visita registrada exitosamente
+        </div>
+        }
+
+        <form [formGroup]="visitForm" (ngSubmit)="submitVisit()">
+          <div class="form-group">
+            <label for="placeId">¿A dónde fuiste? *</label>
+            <select id="placeId" formControlName="placeId" class="form-control">
+              <option value="">Selecciona un lugar...</option>
+              @for(place of places(); track place.id) {
+                <option [value]="place.id">{{ place.name }}</option>
+                }
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="cost">¿Cuánto gastaste? *</label>
+            <div class="input-with-prefix">
+              <span class="prefix">$</span>
+              <input type="number" id="cost" formControlName="cost" placeholder="0" min="0" step="1"
+                class="form-control with-prefix">
+            </div>
+            <small class="form-hint">Ingresa el monto total gastado</small>
+          </div>
+
+          <div class="form-group">
+            <label for="rating">¿Qué puntaje le das? (1-10) *</label>
+            <div class="rating-input">
+              <input type="range" id="rating" formControlName="rating" min="1" max="10" step="1" class="rating-slider">
+              @if(visitForm.value.rating; as rating) {
+                <div class="rating-display">
+                  <span class="rating-number">{{ rating }}</span>
+                  <span
+                    class="rating-stars">{{ '⭐'.repeat(Math.ceil(rating / 2)) }}</span>
+                </div>
+                } @else {
+                <div class="rating-display">
+                  <span class="rating-placeholder">Desliza para calificar</span>
+                </div>
+                }
+            </div>
+            <div class="rating-labels">
+              <span>1 - Malo</span>
+              <span>5 - Regular</span>
+              <span>10 - Excelente</span>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-large" [disabled]="!visitForm.valid">
+            Registrar Visita
+          </button>
+        </form>
+    </div>
+
+    <div class="recent-visits">
+      <h3>Historial Reciente</h3>
+      @if(places().some(p => p.visits.length > 0)) {
+        <div class="visits-list">
+          @for(place of places(); track place.id) {
+            @if(place.visits.length > 0) {
+              <blade
+                for|%20(visit%20of%20place.visits.slice().reverse().slice(0%2C%203)%3B%20track%20%24index)%20%7B%0D>
+                <div class="visit-item">
+                  <div class="visit-header">
+                    <strong>{{ place.name }}</strong>
+                    <span class="visit-date">{{ visit.date.toLocaleDateString() }}</span>
+                  </div>
+                  <div class="visit-details">
+                    <span class="visit-cost">${{ visit.cost }}</span>
+                    <span class="visit-rating">{{ visit.rating }}/10 ⭐</span>
+                  </div>
+                </div>
+                }
+                }
+                }
+        </div>
+        } @else {
+        <p class="no-visits">No hay visitas registradas aún.</p>
+        }
+    </div>
+    }
+</div>

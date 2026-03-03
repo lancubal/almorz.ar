@@ -1,0 +1,208 @@
+{
+  "places": [
+    {
+      "id": "5c05cd85-46c1-4d1b-aa03-2a1eb20c5f66",
+      "name": "El Gringo",
+      "tags": [
+        "Pancho",
+        "Economico",
+        "Rapido"
+      ],
+      "visits": [],
+      "lastVisitDate": null,
+      "createdAt": "2026-03-03T13:31:51.040Z"
+    },
+    {
+      "id": "48e56c16-a97d-43f3-98cb-6819612a8957",
+      "name": "El Palacio",
+      "tags": [
+        "Pizza",
+        "Economico",
+        "Rapido"
+      ],
+      "visits": [],
+      "lastVisitDate": null,
+      "createdAt": "2026-03-03T13:32:16.674Z"
+    },
+    {
+      "id": "638dcde1-b396-42fb-a44e-b7c59c492259",
+      "name": "El Gallego",
+      "tags": [
+        "Sanguche"
+      ],
+      "visits": [],
+      "lastVisitDate": null,
+      "createdAt": "2026-03-03T13:32:33.180Z"
+    },
+    {
+      "id": "c59f2f8d-64a2-4424-805b-6c90db043b84",
+      "name": "El Buen Libro",
+      "tags": [
+        "Sanguche",
+        "Economico"
+      ],
+      "visits": [],
+      "lastVisitDate": null,
+      "createdAt": "2026-03-03T13:32:48.487Z"
+    },
+    {
+      "id": "c9f08df6-8115-4de2-b82d-5c1c1574b5fd",
+      "name": "Deli Office",
+      "tags": [
+        "Ensalada"
+      ],
+      "visits": [],
+      "lastVisitDate": null,
+      "createdAt": "2026-03-03T13:33:44.920Z"
+    },
+    {
+      "id": "49332387-c3ea-487e-becd-60e74200c2bd",
+      "name": "Guerrin",
+      "tags": [
+        "Pizza"
+      ],
+      "visits": [],
+      "lastVisitDate": null,
+      "createdAt": "2026-03-03T13:33:52.619Z"
+    },
+    {
+      "id": "75e81d2f-3f39-4bc1-b6fb-16abe13733ad",
+      "name": "Perez H",
+      "tags": [
+        "Hamburguesa"
+      ],
+      "visits": [],
+      "lastVisitDate": null,
+      "createdAt": "2026-03-03T13:34:15.853Z"
+    },
+    {
+      "id": "fd4ffa14-df28-463a-8744-d5076649ef03",
+      "name": "Birra y Shawarma",
+      "tags": [
+        "Shawarma"
+      ],
+      "visits": [],
+      "lastVisitDate": null,
+      "createdAt": "2026-03-03T13:34:40.564Z"
+    },
+    {
+      "id": "515cfa47-b6e5-495c-b994-82b4c05fdc45",
+      "name": "Saint Burger",
+      "tags": [
+        "Hamburguesa"
+      ],
+      "visits": [],
+      "lastVisitDate": null,
+      "createdAt": "2026-03-03T13:34:50.115Z"
+    },
+    {
+      "id": "868bc001-440f-4813-b61e-ca04b8ea4a7e",
+      "name": "Pandok",
+      "tags": [
+        "Armenio"
+      ],
+      "visits": [],
+      "lastVisitDate": null,
+      "createdAt": "2026-03-03T13:35:16.919Z"
+    },
+    {
+      "id": "a39e5e96-354c-427c-98bf-2d295729e13c",
+      "name": "KFC",
+      "tags": [
+        "Comida Rapida"
+      ],
+      "visits": [],
+      "lastVisitDate": null,
+      "createdAt": "2026-03-03T13:35:33.722Z"
+    },
+    {
+      "id": "65c4b5dc-489e-47c7-a57b-62fbb1a0700d",
+      "name": "Kentucky",
+      "tags": [
+        "Comida Rapida",
+        "Pizza"
+      ],
+      "visits": [],
+      "lastVisitDate": null,
+      "createdAt": "2026-03-03T13:35:51.974Z"
+    },
+    {
+      "id": "73cc8cb6-6044-4f06-96f0-6bc4f617751f",
+      "name": "Kryss Foods",
+      "tags": [
+        "Empanadas",
+        "Comida Rapida"
+      ],
+      "visits": [],
+      "lastVisitDate": null,
+      "createdAt": "2026-03-03T13:36:19.161Z"
+    },
+    {
+      "id": "c3d771a5-83ed-4e18-b7ca-7aa75b783a48",
+      "name": "Cafe Paulin",
+      "tags": [
+        "Sanguche"
+      ],
+      "visits": [],
+      "lastVisitDate": null,
+      "createdAt": "2026-03-03T13:42:32.441Z"
+    },
+    {
+      "id": "b8db2ebf-cf64-4cf4-988b-5f1536f058d4",
+      "name": "Las Cuartetas",
+      "tags": [
+        "Pizza"
+      ],
+      "visits": [],
+      "lastVisitDate": null,
+      "createdAt": "2026-03-03T13:42:48.272Z"
+    },
+    {
+      "id": "4f8df5b2-6799-4ed9-923b-10cd9227d2c4",
+      "name": "Los Panchitos del Sol",
+      "tags": [
+        "Pancho"
+      ],
+      "visits": [],
+      "lastVisitDate": null,
+      "createdAt": "2026-03-03T13:43:35.388Z"
+    },
+    {
+      "id": "27ac8b31-cf5f-4c18-b60a-113c7de05b8d",
+      "name": "Restaurante El Felix",
+      "tags": [
+        "Venezolana"
+      ],
+      "visits": [],
+      "lastVisitDate": null,
+      "createdAt": "2026-03-03T13:46:42.293Z"
+    },
+    {
+      "id": "411732ef-88f5-402c-8622-c5305544ff4d",
+      "name": "El Gordo",
+      "tags": [
+        "Venezolana"
+      ],
+      "visits": [],
+      "lastVisitDate": null,
+      "createdAt": "2026-03-03T13:48:21.273Z"
+    },
+    {
+      "id": "58708e04-a73b-4e47-9d0f-84a5e0003b07",
+      "name": "Naymi",
+      "tags": [
+        "Por Peso"
+      ],
+      "visits": [],
+      "lastVisitDate": null,
+      "createdAt": "2026-03-03T13:51:12.535Z"
+    }
+  ],
+  "settings": [
+    {
+      "id": "1",
+      "lastSelectedId": "b8db2ebf-cf64-4cf4-988b-5f1536f058d4"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
