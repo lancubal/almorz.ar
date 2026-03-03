@@ -43,6 +43,7 @@ export class RouletteComponent {
   protected readonly selectedPlace = signal<PlaceWithWeight | null>(null);
   protected readonly isNewPlace = signal(false);
   protected readonly activeTags = signal<string[]>([]);
+  protected readonly tagFilterOpen = signal(false);
 
   protected readonly isSpinning = computed(
     () => this.spinState() === 'spinning-normal' || this.spinState() === 'spinning-nuevo',
@@ -62,6 +63,14 @@ export class RouletteComponent {
     const active = this.activeTags();
     if (active.length === 0) return eligible;
     return eligible.filter(p => p.tags.some(t => active.includes(t)));
+  });
+
+  protected readonly emptyReason = computed(() => {
+    if (this.placesService.places().length === 0) return 'no-places';
+    const eligible = this.placesService.getEligiblePlaces();
+    if (eligible.length === 0) return 'all-excluded';
+    if (this.filteredEligible().length === 0) return 'tag-filter';
+    return null;
   });
 
   // ─── Wheel segments ───────────────────────────────────────────────────────

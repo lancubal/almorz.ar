@@ -33,35 +33,87 @@
 }
 
 /* ─── Tag filter ─────────────────────────────────────────────────────────────── */
-.tag-filter {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.4rem;
-  justify-content: center;
-  padding: 0.5rem 1rem 0.75rem;
+.tag-filter-wrapper {
+  width: 100%;
+  max-width: 280px;
+  margin: 0 auto 0.5rem;
 }
 
-.tag-filter-label {
-  font-size: 0.78rem;
+.tag-filter-toggle {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 0.5rem 0.85rem;
+  font-size: 0.85rem;
   font-weight: 600;
-  color: #888;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  margin-right: 0.2rem;
+  color: #555;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+  text-align: left;
+}
+
+.tag-filter-toggle:hover {
+  border-color: #667eea;
+  color: #667eea;
+}
+
+.tag-filter-toggle--active {
+  border-color: #667eea;
+  color: #667eea;
+}
+
+.tag-filter-toggle-icon {
+  font-size: 1rem;
+}
+
+.tag-filter-badge {
+  margin-left: 0.1rem;
+  background: #667eea;
+  color: white;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.05rem 0.45rem;
+  min-width: 1.2rem;
+  text-align: center;
+}
+
+.tag-filter-chevron {
+  margin-left: auto;
+  font-size: 1.1rem;
+  transition: transform 0.2s;
+  display: inline-block;
+  line-height: 1;
+}
+
+.tag-filter-chevron--open {
+  transform: rotate(180deg);
+}
+
+.tag-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.5rem 0.25rem 0.25rem;
 }
 
 .tag-chip {
   border: 2px solid #e2e8f0;
-  border-radius: 999px;
+  border-radius: 8px;
   background: white;
   color: #555;
-  font-size: 0.82rem;
+  font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
-  padding: 0.3rem 0.85rem;
+  padding: 0.45rem 0.85rem;
+  text-align: left;
   transition: background 0.15s, border-color 0.15s, color 0.15s;
   line-height: 1.4;
+  width: 100%;
 }
 
 .tag-chip:hover:not(.tag-chip--active):not(.tag-chip--clear) {
@@ -76,14 +128,15 @@
 }
 
 .tag-chip--clear {
-  border-color: #e2e8f0;
-  background: #f8fafc;
+  border: 2px dashed #ccc;
+  background: #fafafa;
   color: #999;
   font-weight: 500;
+  margin-top: 0.15rem;
 }
 
 .tag-chip--clear:hover {
-  border-color: #ccc;
+  border-color: #aaa;
   color: #555;
 }
 

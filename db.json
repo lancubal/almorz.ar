@@ -215,5 +215,11 @@
       "lastSelectedId": "49332387-c3ea-487e-becd-60e74200c2bd"
     }
   ],
+  "appConfig": [
+    {
+      "id": "1",
+      "antiRepeatDays": 5
+    }
+  ],
   "$schema": "./node_modules/json-server/schema.json"
 }

@@ -140,9 +140,9 @@ src/app/
 Posibles mejoras ordenadas por impacto:
 
 ### Alta prioridad
-- [ ] **Blacklist temporal** — "No quiero ir esta semana": excluir un lugar N días sin borrarlo
-- [ ] **Filtro por tags antes de girar** — elegir solo entre lugares "económico" o "rápido" según el día
-- [ ] **Modo anti-repetición semanal** — no volver al mismo lugar dentro de X días configurables
+- [x] **Blacklist temporal** — "No quiero ir esta semana": excluir un lugar N días sin borrarlo
+- [x] **Filtro por tags antes de girar** — elegir solo entre lugares "económico" o "rápido" según el día
+- [x] **Modo anti-repetición semanal** — no volver al mismo lugar dentro de X días configurables (desde Admin)
 
 ### Features de usabilidad
 - [ ] **Historial visual** — timeline de visitas con costo y rating

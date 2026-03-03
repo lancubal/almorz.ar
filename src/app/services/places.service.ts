@@ -14,8 +14,11 @@ export class PlacesService {
   // State signals
   private readonly placesSignal = signal<Place[]>([]);
   private readonly lastSelectedIdSignal = signal<string | null>(null);
+  private readonly antiRepeatDaysSignal = signal(5);
   readonly isLoading = signal(false);
   readonly apiError = signal(false);
+
+  readonly antiRepeatDays = this.antiRepeatDaysSignal.asReadonly();
 
   // Public readonly surfaces
   readonly places = this.placesSignal.asReadonly();
@@ -30,6 +33,7 @@ export class PlacesService {
 
   constructor() {
     this.loadPlaces();
+    this.loadAppConfig();
 
     // React to user changes: load their per-user settings
     effect(() => {
@@ -43,6 +47,21 @@ export class PlacesService {
   }
 
   // --- Data loading ---------------------------------------------------------
+
+  private loadAppConfig(): void {
+    this.http.get<{ id: string; antiRepeatDays: number }>(`${API}/appConfig/1`)
+      .pipe(catchError(() => of(null)))
+      .subscribe(cfg => {
+        if (cfg?.antiRepeatDays != null) this.antiRepeatDaysSignal.set(cfg.antiRepeatDays);
+      });
+  }
+
+  setAntiRepeatDays(days: number): Observable<void> {
+    return this.http.patch(`${API}/appConfig/1`, { antiRepeatDays: days }).pipe(
+      tap(() => this.antiRepeatDaysSignal.set(days)),
+      map(() => void 0),
+    );
+  }
 
   private loadPlaces(): void {
     this.isLoading.set(true);
@@ -141,14 +160,19 @@ export class PlacesService {
 
   // --- Weight & selection logic ----------------------------------------------
 
-  /** Places eligible for the normal spin (excludes last selected and temporarily blacklisted). */
+  /** Places eligible for the normal spin (excludes last selected, blacklisted, and recent anti-repeat). */
   getEligiblePlaces(): PlaceWithWeight[] {
     const lastId = this.lastSelectedIdSignal();
     const now = new Date();
-    return this.placesWithWeights().filter(
-      p => p.id !== lastId && p.weight > 0 &&
-        (!p.blacklistedUntil || new Date(p.blacklistedUntil) <= now)
-    );
+    const antiDays = this.antiRepeatDaysSignal();
+    const cutoff = antiDays > 0 ? new Date(Date.now() - antiDays * 86_400_000) : null;
+    return this.placesWithWeights().filter(p => {
+      if (p.id === lastId) return false;
+      if (p.weight <= 0) return false;
+      if (p.blacklistedUntil && new Date(p.blacklistedUntil) > now) return false;
+      if (cutoff && p.lastVisitDate && new Date(p.lastVisitDate) > cutoff) return false;
+      return true;
+    });
   }
 
   blacklistPlace(id: string, days: number): Observable<void> {

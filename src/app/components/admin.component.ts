@@ -24,6 +24,9 @@ export class AdminComponent {
   protected readonly pinError = signal(false);
   protected readonly pinCtrl = new FormControl('', { nonNullable: true, validators: [Validators.required] });
 
+  protected readonly antiRepeatDays = this.placesService.antiRepeatDays;
+  protected readonly antiRepeatOptions = [0, 1, 2, 3, 5, 7, 10, 14] as const;
+
   protected readonly userStats = computed(() => {
     const places = this.placesService.places();
     const statsMap = new Map<string, { displayName: string; visits: number; totalCost: number; totalRating: number }>();
@@ -63,6 +66,10 @@ export class AdminComponent {
       this.pinError.set(true);
       this.pinCtrl.setValue('');
     }
+  }
+
+  protected setAntiRepeatDays(days: number): void {
+    this.placesService.setAntiRepeatDays(days).subscribe();
   }
 
   protected logout(): void {

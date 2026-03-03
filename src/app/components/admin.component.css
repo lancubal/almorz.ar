@@ -91,7 +91,8 @@ button[type='submit']:disabled {
 }
 
 .stats-section,
-.places-section {
+.places-section,
+.config-section {
   background: var(--card-bg, #fff);
   border-radius: 1rem;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
@@ -99,7 +100,8 @@ button[type='submit']:disabled {
 }
 
 .stats-section h2,
-.places-section h2 {
+.places-section h2,
+.config-section h2 {
   margin: 0 0 1rem;
   font-size: 1.2rem;
 }
@@ -166,4 +168,60 @@ button[type='submit']:disabled {
   position: absolute;
   white-space: nowrap;
   width: 1px;
+}
+
+/* ── Config section ─────────────────────────────────────────────────────────── */
+.config-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.config-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.config-label {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.config-hint {
+  font-size: 0.82rem;
+  color: var(--muted, #6b7280);
+}
+
+.days-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.day-btn {
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  background: white;
+  color: #555;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.35rem 0.7rem;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+  min-width: 2.6rem;
+  text-align: center;
+}
+
+.day-btn:hover:not(.day-btn--active) {
+  border-color: #667eea;
+  color: #667eea;
+}
+
+.day-btn--active {
+  background: #667eea;
+  border-color: #667eea;
+  color: white;
 }

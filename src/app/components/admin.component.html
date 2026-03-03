@@ -60,6 +60,29 @@
       }
     </section>
 
+    <section class="config-section" aria-label="Configuración de la ruleta">
+      <h2>Configuración</h2>
+
+      <div class="config-row">
+        <div class="config-info">
+          <span class="config-label">🔄 Modo anti-repetición</span>
+          <span class="config-hint">Excluir lugares visitados en los últimos N días</span>
+        </div>
+        <div class="days-selector" role="group" aria-label="Días sin repetir">
+          @for (opt of antiRepeatOptions; track opt) {
+            <button
+              type="button"
+              class="day-btn"
+              [class.day-btn--active]="antiRepeatDays() === opt"
+              [attr.aria-pressed]="antiRepeatDays() === opt"
+              (click)="setAntiRepeatDays(opt)">
+              {{ opt === 0 ? 'Off' : opt + 'd' }}
+            </button>
+          }
+        </div>
+      </div>
+    </section>
+
     <section class="places-section" aria-label="Gestión de lugares">
       <h2>Lugares</h2>
       <app-places-manager />
