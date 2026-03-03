@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "80:80"
+      - "8080:80"   # el nginx principal de luna-lancuba.dev hace proxy a este puerto
     depends_on:
       - api
     restart: unless-stopped
@@ -14,7 +14,7 @@ services:
       context: .
       dockerfile: Dockerfile.api
     ports:
-      - "3001:3001"   # opcional — útil para debugging local
+      - "8081:3001"   # el nginx externo hace proxy a este puerto
     volumes:
       - ./db.json:/app/db.json   # bind mount → datos persisten en el host
                                   # en AWS: reemplazar por un volumen EFS

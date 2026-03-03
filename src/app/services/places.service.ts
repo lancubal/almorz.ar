@@ -3,8 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, tap, switchMap, map, catchError, of, forkJoin } from 'rxjs';
 import { Place, Visit, PlaceWithWeight, UserSettings, VisitEntry } from '../models/place.model';
 import { UserService } from './user.service';
+import { environment } from '../../environments/environment';
 
-const API = '/api';
+const API = environment.apiBase;
 
 @Injectable({ providedIn: 'root' })
 export class PlacesService {
@@ -297,4 +298,3 @@ export class PlacesService {
     });
   }
 }
-
