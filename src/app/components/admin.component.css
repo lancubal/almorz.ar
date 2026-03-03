@@ -92,7 +92,8 @@ button[type='submit']:disabled {
 
 .stats-section,
 .places-section,
-.config-section {
+.config-section,
+.weights-section {
   background: var(--card-bg, #fff);
   border-radius: 1rem;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
@@ -101,7 +102,8 @@ button[type='submit']:disabled {
 
 .stats-section h2,
 .places-section h2,
-.config-section h2 {
+.config-section h2,
+.weights-section h2 {
   margin: 0 0 1rem;
   font-size: 1.2rem;
 }
@@ -224,4 +226,84 @@ button[type='submit']:disabled {
   background: #667eea;
   border-color: #667eea;
   color: white;
+}
+
+/* ── Weights section ────────────────────────────────────────────────────────── */
+.weights-hint {
+  font-size: 0.85rem;
+  color: var(--muted, #6b7280);
+  margin: -0.4rem 0 1rem;
+}
+
+.weights-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.weight-row {
+  display: grid;
+  grid-template-columns: 160px 1fr 52px 28px;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.3rem 0;
+}
+
+.weight-row--excluded .weight-name {
+  color: #bbb;
+}
+
+.weight-row--excluded .weight-bar-fill {
+  background: #ddd !important;
+}
+
+.weight-name {
+  font-size: 0.88rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #222;
+}
+
+.weight-bar-track {
+  background: #f0f0f0;
+  border-radius: 999px;
+  height: 10px;
+  overflow: hidden;
+}
+
+.weight-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+.weight-value {
+  font-size: 0.8rem;
+  color: #666;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.badge--ok {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.badge--off {
+  background: #f3f4f6;
+  color: #9ca3af;
 }

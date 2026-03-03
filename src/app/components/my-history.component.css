@@ -1,5 +1,5 @@
 .history-container {
-  max-width: 720px;
+  max-width: 640px;
   margin: 0 auto;
   padding: 2rem 1rem;
 }
@@ -10,35 +10,39 @@ h2 {
   font-size: 1.4rem;
 }
 
+/* ── Summary row ────────────────────────────────────────────── */
 .summary-row {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.65rem;
   margin-bottom: 2rem;
 }
 
 .summary-card {
   background: white;
   border-radius: 12px;
-  padding: 1.25rem 1rem;
+  padding: 1rem 0.6rem;
   text-align: center;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .summary-value {
-  font-size: 1.8rem;
+  font-size: 1.35rem;
   font-weight: 800;
   color: #667eea;
   display: block;
 }
 
 .summary-label {
-  font-size: 0.78rem;
+  font-size: 0.68rem;
   color: #888;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.4px;
+  margin-top: 0.1rem;
+  display: block;
 }
 
+/* ── Empty state ────────────────────────────────────────────── */
 .empty {
   text-align: center;
   padding: 4rem 2rem;
@@ -51,61 +55,128 @@ h2 {
   margin-bottom: 1rem;
 }
 
-.visit-list {
+/* ── Timeline ───────────────────────────────────────────────── */
+.timeline {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
 }
 
-.visit-item {
+.tl-item {
+  display: grid;
+  grid-template-columns: 68px 24px 1fr;
+  gap: 0 0.75rem;
+  align-items: start;
+}
+
+/* Date label */
+.tl-date {
+  text-align: right;
+  padding-top: 0.55rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #999;
+  white-space: nowrap;
+}
+
+/* Spine: dot + vertical connector */
+.tl-spine {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tl-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #667eea;
+  border: 2px solid white;
+  box-shadow: 0 0 0 2px #667eea;
+  margin-top: 0.58rem;
+  flex-shrink: 0;
+}
+
+.tl-line {
+  width: 2px;
+  flex: 1;
+  min-height: 1.25rem;
+  background: #e2e8f0;
+  margin-top: 3px;
+}
+
+/* Card */
+.tl-card {
   background: white;
   border-radius: 12px;
-  padding: 1rem 1.25rem;
+  padding: 0.8rem 1rem;
+  margin-bottom: 0.6rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
-  display: grid;
-  grid-template-columns: 1fr auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.tl-place {
+  font-weight: 700;
+  color: #1a1a1a;
+  font-size: 0.97rem;
+  line-height: 1.25;
+}
+
+/* Rating bar */
+.tl-rating {
+  display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-.visit-place {
-  font-weight: 700;
-  color: #1a1a1a;
-  font-size: 1rem;
+.tl-rating-track {
+  flex: 1;
+  height: 6px;
+  background: #f0f0f0;
+  border-radius: 999px;
+  overflow: hidden;
 }
 
-.visit-date {
+.tl-rating-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+.tl-rating-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #666;
+  min-width: 2.4rem;
+  text-align: right;
+}
+
+/* Cost chip */
+.tl-cost-chip {
+  display: inline-block;
+  background: #f0fdf4;
+  color: #16a34a;
+  border-radius: 8px;
+  padding: 0.18rem 0.55rem;
   font-size: 0.8rem;
-  color: #999;
-  margin-top: 0.15rem;
-}
-
-.visit-meta {
-  display: flex;
-  gap: 0.75rem;
-  align-items: center;
-}
-
-.rating {
-  background: #fff8e1;
-  color: #f57c00;
-  border-radius: 8px;
-  padding: 0.2rem 0.5rem;
-  font-size: 0.85rem;
   font-weight: 700;
 }
 
-.cost {
-  background: #e8f5e9;
-  color: #388e3c;
-  border-radius: 8px;
-  padding: 0.2rem 0.5rem;
-  font-size: 0.85rem;
-  font-weight: 700;
-}
-
-@media (max-width: 480px) {
+/* Responsive */
+@media (max-width: 520px) {
   .summary-row {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 400px) {
+  .tl-item {
+    grid-template-columns: 52px 20px 1fr;
+    gap: 0 0.4rem;
+  }
+
+  .tl-date {
+    font-size: 0.65rem;
   }
 }

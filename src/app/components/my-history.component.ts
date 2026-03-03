@@ -32,11 +32,34 @@ export class MyHistoryComponent {
     return Math.round(avg).toLocaleString('es-AR');
   });
 
+  protected readonly totalSpent = computed(() => {
+    const list = this.entries();
+    if (list.length === 0) return '—';
+    return list.reduce((s, e) => s + e.visit.cost, 0).toLocaleString('es-AR');
+  });
+
+  protected ratingBarWidth(rating: number): number {
+    return (rating / 10) * 100;
+  }
+
+  protected ratingColor(rating: number): string {
+    if (rating >= 8) return '#22c55e';
+    if (rating >= 5) return '#f59e0b';
+    return '#ef4444';
+  }
+
   protected formatDate(date: Date | string): string {
     return new Date(date).toLocaleDateString('es-AR', {
       day: '2-digit',
       month: 'short',
       year: 'numeric',
+    });
+  }
+
+  protected formatShortDate(date: Date | string): string {
+    return new Date(date).toLocaleDateString('es-AR', {
+      day: '2-digit',
+      month: 'short',
     });
   }
 }

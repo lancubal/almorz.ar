@@ -82,6 +82,30 @@
       </div>
     </section>
 
+    <section class="weights-section" aria-label="Pesos de la ruleta">
+      <h2>⚖️ Pesos de la ruleta</h2>
+      <p class="weights-hint">Probabilidad relativa de cada lugar en la próxima tirada. Los excluidos no aparecerán.</p>
+
+      <div class="weights-list">
+        @for (place of weightedPlaces(); track place.id) {
+          <div class="weight-row" [class.weight-row--excluded]="!eligibleIds().has(place.id)">
+            <div class="weight-name" [title]="place.name">{{ place.name }}</div>
+            <div class="weight-bar-track" aria-hidden="true">
+              <div class="weight-bar-fill" [style.width.%]="(place.weight / maxWeight()) * 100"></div>
+            </div>
+            <div class="weight-value">{{ place.weight.toFixed(2) }}</div>
+            <div class="weight-status">
+              @if (eligibleIds().has(place.id)) {
+                <span class="badge badge--ok">✓</span>
+              } @else {
+                <span class="badge badge--off">–</span>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+
     <section class="places-section" aria-label="Gestión de lugares">
       <h2>Lugares</h2>
       <app-places-manager />

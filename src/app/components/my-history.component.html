@@ -10,28 +10,49 @@
     <div class="summary-row" role="region" aria-label="Resumen de visitas">
       <div class="summary-card">
         <span class="summary-value">{{ entries().length }}</span>
-        <span class="summary-label">Visitas totales</span>
+        <span class="summary-label">Visitas</span>
       </div>
       <div class="summary-card">
         <span class="summary-value">{{ avgRating() }}</span>
-        <span class="summary-label">Rating promedio</span>
+        <span class="summary-label">Rating prom.</span>
       </div>
       <div class="summary-card">
-        <span class="summary-value">$&thinsp;{{ avgCost() }}</span>
-        <span class="summary-label">Gasto promedio</span>
+        <span class="summary-value">${{ avgCost() }}</span>
+        <span class="summary-label">Gasto prom.</span>
+      </div>
+      <div class="summary-card">
+        <span class="summary-value">${{ totalSpent() }}</span>
+        <span class="summary-label">Total gastado</span>
       </div>
     </div>
 
-    <div class="visit-list" role="list">
+    <div class="timeline" role="list" aria-label="Historial de visitas">
       @for (entry of entries(); track $index) {
-        <div class="visit-item" role="listitem">
-          <div>
-            <div class="visit-place">{{ entry.placeName }}</div>
-            <div class="visit-date">{{ formatDate(entry.visit.date) }}</div>
+        <div class="tl-item" role="listitem">
+          <div class="tl-date" aria-label="Fecha">{{ formatShortDate(entry.visit.date) }}</div>
+
+          <div class="tl-spine" aria-hidden="true">
+            <div class="tl-dot"></div>
+            @if (!$last) { <div class="tl-line"></div> }
           </div>
-          <div class="visit-meta">
-            <span class="rating" [attr.aria-label]="'Rating ' + entry.visit.rating">⭐ {{ entry.visit.rating }}/10</span>
-            <span class="cost" [attr.aria-label]="'Costo $' + entry.visit.cost">${{ entry.visit.cost }}</span>
+
+          <div class="tl-card">
+            <div class="tl-place">{{ entry.placeName }}</div>
+
+            <div class="tl-rating" [attr.aria-label]="'Rating ' + entry.visit.rating + ' de 10'">
+              <div class="tl-rating-track">
+                <div
+                  class="tl-rating-fill"
+                  [style.width.%]="ratingBarWidth(entry.visit.rating)"
+                  [style.background]="ratingColor(entry.visit.rating)">
+                </div>
+              </div>
+              <span class="tl-rating-label">{{ entry.visit.rating }}/10</span>
+            </div>
+
+            <div class="tl-cost">
+              <span class="tl-cost-chip">💰 ${{ entry.visit.cost.toLocaleString('es-AR') }}</span>
+            </div>
           </div>
         </div>
       }

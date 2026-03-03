@@ -58,6 +58,19 @@ export class AdminComponent {
     this.placesService.places().reduce((s, p) => s + p.visits.length, 0)
   );
 
+  protected readonly weightedPlaces = computed(() =>
+    [...this.placesService.placesWithWeights()].sort((a, b) => b.weight - a.weight)
+  );
+
+  protected readonly maxWeight = computed(() => {
+    const places = this.weightedPlaces();
+    return places.length > 0 ? places[0].weight : 1;
+  });
+
+  protected readonly eligibleIds = computed(() =>
+    new Set(this.placesService.getEligiblePlaces().map(p => p.id))
+  );
+
   protected submitPin(): void {
     if (this.pinCtrl.value === ADMIN_PIN) {
       this.isUnlocked.set(true);
