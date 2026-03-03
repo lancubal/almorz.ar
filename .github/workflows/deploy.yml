@@ -23,7 +23,7 @@ jobs:
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}   # arn:aws:iam::ACCOUNT_ID:role/ROLE_NAME
           aws-region:     ${{ env.AWS_REGION }}
 
       - name: Login to Amazon ECR
@@ -57,6 +57,8 @@ jobs:
           script: |
             aws ecr get-login-password --region ${{ env.AWS_REGION }} \
               | docker login --username AWS --password-stdin ${{ secrets.ECR_REGISTRY }}
+
+            cd ${{ secrets.EC2_WORKDIR }}
 
             docker compose -f docker-compose.prod.yml --profile almorz pull
             docker compose -f docker-compose.prod.yml --profile almorz up -d
