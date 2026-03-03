@@ -234,3 +234,91 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* ─── Blacklist zone ──────────────────────────────────────────────────────── */
+.blacklist-zone {
+  border-top: 1px solid #f0f0f0;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+}
+
+.bl-trigger {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding: 0;
+  transition: color 0.15s;
+}
+
+.bl-trigger:hover {
+  color: #b91c1c;
+}
+
+.bl-active {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.bl-chip {
+  background: #fff1f2;
+  border: 1px solid #fca5a5;
+  border-radius: 999px;
+  color: #b91c1c;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.2rem 0.65rem;
+}
+
+.bl-undo {
+  background: none;
+  border: 1px solid #d1d5db;
+  border-radius: 999px;
+  color: #374151;
+  cursor: pointer;
+  font-size: 0.78rem;
+  padding: 0.2rem 0.6rem;
+  transition: background 0.15s;
+}
+
+.bl-undo:hover {
+  background: #f3f4f6;
+}
+
+.bl-picker {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.bl-label {
+  color: #6b7280;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.bl-picker button {
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background: white;
+  color: #374151;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.25rem 0.6rem;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.bl-picker button:hover {
+  background: #fef2f2;
+  border-color: #fca5a5;
+  color: #b91c1c;
+}
+
+.bl-cancel {
+  color: #9ca3af !important;
+}

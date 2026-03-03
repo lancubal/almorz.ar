@@ -98,9 +98,15 @@
                       }
                 </div>
 
-                <button class="btn-spin-again" (click)="resetSpin()" type="button">
-                  Girar de nuevo
-                </button>
+                <div class="result-actions">
+                  <button class="btn-spin-again" (click)="resetSpin()" type="button">
+                    Girar de nuevo
+                  </button>
+                  <button class="btn-blacklist" (click)="blacklistAndRespin(place.id)" type="button"
+                    aria-label="Excluir este lugar por 7 días y girar de nuevo">
+                    🚫 No ir esta semana
+                  </button>
+                </div>
           </div>
           }
           }

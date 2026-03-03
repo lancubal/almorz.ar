@@ -96,6 +96,29 @@
                       </div>
                       }
               </div>
+
+              <div class="blacklist-zone">
+                @if (isBlacklisted(place)) {
+                  <div class="bl-active">
+                    <span class="bl-chip">🚫 Excluida hasta {{ blacklistExpiry(place) }}</span>
+                    <button class="bl-undo" type="button" (click)="doRemoveFromBlacklist(place.id)">
+                      ✓ Reincorporar
+                    </button>
+                  </div>
+                } @else if (blacklistingId() === place.id) {
+                  <div class="bl-picker">
+                    <span class="bl-label">Excluir por:</span>
+                    <button type="button" (click)="confirmBlacklist(place.id, 3)">3 días</button>
+                    <button type="button" (click)="confirmBlacklist(place.id, 7)">1 semana</button>
+                    <button type="button" (click)="confirmBlacklist(place.id, 14)">2 semanas</button>
+                    <button type="button" class="bl-cancel" (click)="cancelBlacklist()" aria-label="Cancelar">✕</button>
+                  </div>
+                } @else {
+                  <button class="bl-trigger" type="button" (click)="startBlacklist(place.id)">
+                    🚫 Excluir temporalmente
+                  </button>
+                }
+              </div>
           </div>
           }
       </div>

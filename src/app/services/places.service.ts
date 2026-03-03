@@ -22,6 +22,12 @@ export class PlacesService {
   readonly lastSelectedId = this.lastSelectedIdSignal.asReadonly();
   readonly placesWithWeights = computed(() => this.calculateWeights(this.placesSignal()));
 
+  readonly totalVisits = computed(() =>
+    this.placesSignal().reduce((sum, p) => sum + p.visits.length, 0)
+  );
+  /** Show the "âœ¨ Nuevo" segment only once there's a meaningful visit history. */
+  readonly showNuevoSegment = computed(() => this.totalVisits() >= 20);
+
   constructor() {
     this.loadPlaces();
 
@@ -83,6 +89,7 @@ export class PlacesService {
       visits: [],
       lastVisitDate: null,
       createdAt: new Date(),
+      blacklistedUntil: null,
     };
     return this.http.post<Place>(`${API}/places`, newPlace).pipe(
       switchMap(() => this.refreshPlaces()),
@@ -134,10 +141,27 @@ export class PlacesService {
 
   // --- Weight & selection logic ----------------------------------------------
 
-  /** Places eligible for the normal spin (excludes THIS user's last selected) */
+  /** Places eligible for the normal spin (excludes last selected and temporarily blacklisted). */
   getEligiblePlaces(): PlaceWithWeight[] {
     const lastId = this.lastSelectedIdSignal();
-    return this.placesWithWeights().filter(p => p.id !== lastId && p.weight > 0);
+    const now = new Date();
+    return this.placesWithWeights().filter(
+      p => p.id !== lastId && p.weight > 0 &&
+        (!p.blacklistedUntil || new Date(p.blacklistedUntil) <= now)
+    );
+  }
+
+  blacklistPlace(id: string, days: number): Observable<void> {
+    const until = new Date(Date.now() + days * 86_400_000).toISOString();
+    return this.http.patch<Place>(`${API}/places/${id}`, { blacklistedUntil: until }).pipe(
+      switchMap(() => this.refreshPlaces()),
+    );
+  }
+
+  removeFromBlacklist(id: string): Observable<void> {
+    return this.http.patch<Place>(`${API}/places/${id}`, { blacklistedUntil: null }).pipe(
+      switchMap(() => this.refreshPlaces()),
+    );
   }
 
   /** Places that have never been visited (by anyone) */
@@ -185,14 +209,14 @@ export class PlacesService {
   }
 
   // --- Weight calculation ---------------------------------------------------
-  // Weights are global — based on visits from ALL users combined
+  // Weights are global ï¿½ based on visits from ALL users combined
 
   private calculateWeights(places: Place[]): PlaceWithWeight[] {
     const now = Date.now();
     return places.map(place => {
       let weight = 1;
 
-      // Rating: higher is better (range ~0.2–2.0)
+      // Rating: higher is better (range ~0.2ï¿½2.0)
       if (place.visits.length > 0) {
         const avgRating = place.visits.reduce((s, v) => s + v.rating, 0) / place.visits.length;
         weight *= avgRating / 5;
@@ -204,7 +228,7 @@ export class PlacesService {
         weight *= Math.max(0.5, Math.min(2, 3000 / (avgCost + 500)));
       }
 
-      // Aging: longer not visited ? higher weight (capped at 3×)
+      // Aging: longer not visited ? higher weight (capped at 3ï¿½)
       if (place.lastVisitDate) {
         const daysSince = (now - new Date(place.lastVisitDate).getTime()) / 86_400_000;
         weight *= Math.min(1 + (daysSince / 7) * 0.2, 3);

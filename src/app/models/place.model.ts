@@ -16,6 +16,8 @@ export interface Place {
   visits: Visit[];
   lastVisitDate: Date | null;
   createdAt: Date;
+  /** ISO date string — place is excluded from the wheel until this date. */
+  blacklistedUntil?: string | null;
 }
 
 export interface Visit {

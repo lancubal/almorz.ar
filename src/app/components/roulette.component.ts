@@ -59,7 +59,9 @@ export class RouletteComponent {
     type Entry = { id: string; label: string; weight: number; isNuevo: boolean; place: PlaceWithWeight | null };
     const entries: Entry[] = [
       ...eligible.map(p => ({ id: p.id, label: p.name, weight: p.weight, isNuevo: false, place: p })),
-      { id: 'nuevo', label: '✨ Nuevo', weight: avgWeight, isNuevo: true, place: null },
+      ...(this.placesService.showNuevoSegment()
+        ? [{ id: 'nuevo', label: '✨ Nuevo', weight: avgWeight, isNuevo: true, place: null }]
+        : []),
     ];
 
     const totalWeight = entries.reduce((s, e) => s + e.weight, 0);
@@ -163,6 +165,10 @@ export class RouletteComponent {
     this.spinState.set('idle');
     this.selectedPlace.set(null);
     this.isNewPlace.set(false);
+  }
+
+  protected blacklistAndRespin(placeId: string): void {
+    this.placesService.blacklistPlace(placeId, 7).subscribe(() => this.resetSpin());
   }
 
   // ─── Helpers ──────────────────────────────────────────────────────────────

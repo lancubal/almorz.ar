@@ -17,6 +17,7 @@ export class PlacesManagerComponent {
   protected readonly places = this.placesService.places;
   protected readonly isFormVisible = signal(false);
   protected readonly editingPlace = signal<Place | null>(null);
+  protected readonly blacklistingId = signal<string | null>(null);
 
   protected readonly placeForm = new FormGroup({
     name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
@@ -92,5 +93,31 @@ export class PlacesManagerComponent {
   protected getAverageCost(place: Place): number | null {
     if (place.visits.length === 0) return null;
     return place.visits.reduce((sum, v) => sum + v.cost, 0) / place.visits.length;
+  }
+
+  protected isBlacklisted(place: Place): boolean {
+    return !!place.blacklistedUntil && new Date(place.blacklistedUntil) > new Date();
+  }
+
+  protected blacklistExpiry(place: Place): string {
+    if (!place.blacklistedUntil) return '';
+    return new Date(place.blacklistedUntil).toLocaleDateString('es-AR', { day: 'numeric', month: 'short' });
+  }
+
+  protected startBlacklist(id: string): void {
+    this.blacklistingId.set(id);
+  }
+
+  protected cancelBlacklist(): void {
+    this.blacklistingId.set(null);
+  }
+
+  protected confirmBlacklist(id: string, days: number): void {
+    this.blacklistingId.set(null);
+    this.placesService.blacklistPlace(id, days).subscribe();
+  }
+
+  protected doRemoveFromBlacklist(id: string): void {
+    this.placesService.removeFromBlacklist(id).subscribe();
   }
 }
