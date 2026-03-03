@@ -1,4 +1,4 @@
-@if (!currentUser() && userIsReady()) {
+@if (!currentUser() && userIsReady() && !isAdminRoute()) {
   <app-user-setup />
 }
 
