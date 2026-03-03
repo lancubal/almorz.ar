@@ -146,7 +146,7 @@ Posibles mejoras ordenadas por impacto:
 
 ### Features de usabilidad
 - [x] **Historial visual** — timeline de visitas con costo y rating
-- [ ] **Estadísticas / analytics** — gasto mensual, lugar favorito, rating promedio por tag
+- [x] **Estadísticas / analytics** — gasto mensual, lugar favorito, rating promedio por tag
 - [ ] **Exportar / importar datos** — backup y restauración del `db.json` desde la UI
 - [ ] **Mapa de lugares** — link a Google Maps para cada lugar
 
