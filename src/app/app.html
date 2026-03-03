@@ -1,5 +1,5 @@
 @if (!currentUser() && userIsReady()) {
-  <app-user-setup (done)="onUserSetupDone()" />
+  <app-user-setup />
 }
 
 <div class="app-container">
@@ -19,34 +19,21 @@
   </header>
 
   <nav class="app-nav" aria-label="Navegación principal">
-    <button class="nav-tab" [class.active]="activeTab() === 'roulette'" (click)="setActiveTab('roulette')" type="button">
+    <a class="nav-tab" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
       🎰 Ruleta
-    </button>
-    <button class="nav-tab" [class.active]="activeTab() === 'visits'" (click)="setActiveTab('visits')" type="button">
+    </a>
+    <a class="nav-tab" routerLink="/visits" routerLinkActive="active">
       📝 Registrar
-    </button>
-    <button class="nav-tab" [class.active]="activeTab() === 'history'" (click)="setActiveTab('history')" type="button">
+    </a>
+    <a class="nav-tab" routerLink="/history" routerLinkActive="active">
       📋 Mi Historial
-    </button>
-    <button class="nav-tab" [class.active]="activeTab() === 'admin'" (click)="setActiveTab('admin')" type="button">
-      🔧 Admin
-    </button>
+    </a>
+    <a class="nav-tab" routerLink="/places" routerLinkActive="active">
+      📍 Lugares
+    </a>
   </nav>
 
   <main class="app-main">
-    @switch(activeTab()) {
-      @case('roulette') {
-        <app-roulette />
-      }
-      @case('visits') {
-        <app-visit-logger />
-      }
-      @case('history') {
-        <app-my-history />
-      }
-      @case('admin') {
-        <app-admin />
-      }
-    }
+    <router-outlet />
   </main>
 </div>
