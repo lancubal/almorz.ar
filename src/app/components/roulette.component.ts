@@ -1,4 +1,5 @@
 import { Component, signal, computed, inject, ChangeDetectionStrategy } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { PlacesService } from '../services/places.service';
 import { UserService } from '../services/user.service';
 import { PlaceWithWeight } from '../models/place.model';
@@ -31,6 +32,7 @@ interface WheelSegment {
 
 @Component({
   selector: 'app-roulette',
+  imports: [RouterLink],
   templateUrl: './roulette.component.html',
   styleUrl: './roulette.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -256,6 +258,13 @@ export class RouletteComponent {
     if (rating >= 8) return '#22c55e';
     if (rating >= 5) return '#f59e0b';
     return '#ef4444';
+  }
+
+  protected mapsUrl(place: PlaceWithWeight): string {
+    if (place.googlePlaceId) {
+      return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.name)}&query_place_id=${place.googlePlaceId}`;
+    }
+    return `https://www.google.com/maps/search/${encodeURIComponent(place.name)}`;
   }
 }
 

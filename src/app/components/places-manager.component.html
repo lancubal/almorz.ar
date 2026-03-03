@@ -12,13 +12,50 @@
       </h3>
 
       <form [formGroup]="placeForm" (ngSubmit)="submitForm()">
+        @if (mapsService.ready()) {
+          <div class="form-group">
+            <label for="place-search">🔍 Buscar en Google Maps</label>
+            <input
+              type="text"
+              id="place-search"
+              #searchInput
+              class="form-control"
+              placeholder="Buscar restaurant…"
+              autocomplete="off"
+              aria-label="Buscar lugar en Google Maps">
+            @if (selectedLocation(); as loc) {
+              <div class="location-pill">
+                <span>📍 {{ loc.address }}</span>
+                <button type="button" class="location-pill-clear" (click)="clearLocation()" aria-label="Quitar ubicación">✕</button>
+              </div>
+            }
+            <button
+              type="button"
+              class="btn btn-nearby"
+              (click)="fetchNearbySuggestions()"
+              [disabled]="nearbyLoading()">
+              {{ nearbyLoading() ? 'Buscando…' : '📍 Sugerencias cercanas' }}
+            </button>
+            @if (nearbyResults().length > 0) {
+              <div class="nearby-list" role="list" aria-label="Sugerencias cercanas">
+                @for (r of nearbyResults(); track r.placeId) {
+                  <button type="button" class="nearby-item" role="listitem" (click)="fillFromNearby(r)">
+                    <strong>{{ r.name }}</strong>
+                    <span>{{ r.address }}</span>
+                  </button>
+                }
+              </div>
+            }
+          </div>
+        }
+
         <div class="form-group">
           <label for="name">Nombre del lugar *</label>
-          <input type="text" id="name" formControlName="name" placeholder="Ej: La Esquina del Bife"
-            class="form-control" [class.input-warning]="duplicateWarning()">
-          @if (duplicateWarning()) {
+          <input type="text" id="name" formControlName="name" placeholder="Ej: La Esquina del Bife" class="form-control"
+            [class.input-warning]="duplicateWarning()">
+          @if(duplicateWarning()) {
             <p class="field-warning" role="alert">⚠️ {{ duplicateWarning() }}</p>
-          }
+            }
         </div>
 
         <div class="form-group">
@@ -26,14 +63,14 @@
           <input type="text" id="tags" formControlName="tags" placeholder="Ej: parrilla, económico, rápido"
             class="form-control">
           <small class="form-hint">Usa tags para categorizar: tipo de comida, precio, etc.</small>
-          @if (suggestedTags().length > 0) {
+          @if(suggestedTags().length > 0) {
             <div class="tag-suggestions" aria-label="Tags ya usados">
               <span class="tag-suggestions-label">Agregar:</span>
-              @for (tag of suggestedTags(); track tag) {
+              @for(tag of suggestedTags(); track tag) {
                 <button type="button" class="tag-suggestion-chip" (click)="appendTag(tag)">+ {{ tag }}</button>
-              }
+                }
             </div>
-          }
+            }
         </div>
 
         <div class="form-actions">
@@ -106,14 +143,14 @@
               </div>
 
               <div class="blacklist-zone">
-                @if (isBlacklisted(place)) {
+                @if(isBlacklisted(place)) {
                   <div class="bl-active">
                     <span class="bl-chip">🚫 Excluida hasta {{ blacklistExpiry(place) }}</span>
                     <button class="bl-undo" type="button" (click)="doRemoveFromBlacklist(place.id)">
                       ✓ Reincorporar
                     </button>
                   </div>
-                } @else if (blacklistingId() === place.id) {
+                  } @else if (blacklistingId() === place.id) {
                   <div class="bl-picker">
                     <span class="bl-label">Excluir por:</span>
                     <button type="button" (click)="confirmBlacklist(place.id, 3)">3 días</button>
@@ -121,11 +158,11 @@
                     <button type="button" (click)="confirmBlacklist(place.id, 14)">2 semanas</button>
                     <button type="button" class="bl-cancel" (click)="cancelBlacklist()" aria-label="Cancelar">✕</button>
                   </div>
-                } @else {
+                  } @else {
                   <button class="bl-trigger" type="button" (click)="startBlacklist(place.id)">
                     🚫 Excluir temporalmente
                   </button>
-                }
+                  }
               </div>
           </div>
           }

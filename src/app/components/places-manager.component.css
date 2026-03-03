@@ -136,7 +136,9 @@
   font-weight: 600;
   padding: 0.2rem 0.6rem;
   cursor: pointer;
-  transition: background 0.12s, border-color 0.12s;
+  transition:
+    background 0.12s,
+    border-color 0.12s;
   line-height: 1.4;
 }
 
@@ -343,7 +345,9 @@
   font-size: 0.8rem;
   font-weight: 600;
   padding: 0.25rem 0.6rem;
-  transition: background 0.15s, border-color 0.15s;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
 }
 
 .bl-picker button:hover {
@@ -354,4 +358,104 @@
 
 .bl-cancel {
   color: #9ca3af !important;
+}
+
+/* ─── Maps controls in form ───────────────────────────────────────────────── */
+.location-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #ede9fe;
+  border: 1.5px solid #c4b5fd;
+  border-radius: 8px;
+  padding: 0.4rem 0.75rem;
+  margin-top: 0.4rem;
+  font-size: 0.82rem;
+  color: #5b21b6;
+}
+
+.location-pill span {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.location-pill-clear {
+  background: none;
+  border: none;
+  color: #7c3aed;
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 0;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.btn-nearby {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.5rem;
+  padding: 0.45rem 1rem;
+  border-radius: 20px;
+  border: 1.5px solid #93c5fd;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn-nearby:hover:not(:disabled) {
+  background: #dbeafe;
+}
+
+.btn-nearby:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.nearby-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-top: 0.5rem;
+  max-height: 220px;
+  overflow-y: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+}
+
+.nearby-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.1rem;
+  padding: 0.5rem 0.75rem;
+  background: white;
+  border: none;
+  border-bottom: 1px solid #f3f4f6;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.12s;
+  font-size: 0.85rem;
+}
+
+.nearby-item:last-child {
+  border-bottom: none;
+}
+
+.nearby-item:hover {
+  background: #f9fafb;
+}
+
+.nearby-item strong {
+  color: #111827;
+}
+
+.nearby-item span {
+  color: #6b7280;
+  font-size: 0.77rem;
 }

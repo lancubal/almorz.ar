@@ -18,6 +18,19 @@ export interface Place {
   visits: Visit[];
   lastVisitDate: Date | null;
   createdAt: Date;
+  /** Google Maps data — optional (backward-compatible with existing places) */
+  lat?: number;
+  lng?: number;
+  address?: string;
+  googlePlaceId?: string;
+}
+
+/** Extracted from Google Places Autocomplete / Nearby Search */
+export interface PlaceLocation {
+  lat: number;
+  lng: number;
+  address: string;
+  googlePlaceId: string;
 }
 
 export interface Visit {

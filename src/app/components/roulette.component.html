@@ -1,189 +1,193 @@
 <div class="roulette-container">
-  @if (allTags().length > 0) {
+  @if(allTags().length > 0) {
     <div class="tag-filter-wrapper">
-      <button
-        type="button"
-        class="tag-filter-toggle"
-        [class.tag-filter-toggle--active]="activeTags().length > 0"
-        [attr.aria-expanded]="tagFilterOpen()"
-        (click)="tagFilterOpen.update(v => !v)">
+      <button type="button" class="tag-filter-toggle" [class.tag-filter-toggle--active]="activeTags().length > 0"
+        [attr.aria-expanded]="tagFilterOpen()" (click)="tagFilterOpen.update(v => !v)">
         <span class="tag-filter-toggle-icon">🏷️</span>
         <span>Filtrar por tags</span>
-        @if (activeTags().length > 0) {
+        @if(activeTags().length > 0) {
           <span class="tag-filter-badge">{{ activeTags().length }}</span>
-        }
-        <span class="tag-filter-chevron" [class.tag-filter-chevron--open]="tagFilterOpen()">▾</span>
+          }
+          <span class="tag-filter-chevron" [class.tag-filter-chevron--open]="tagFilterOpen()">▾</span>
       </button>
 
-      @if (tagFilterOpen()) {
+      @if(tagFilterOpen()) {
         <div class="tag-filter" role="group" aria-label="Filtrar por categoría">
-          @for (tag of allTags(); track tag) {
-            <button
-              type="button"
-              class="tag-chip"
-              [class.tag-chip--active]="activeTags().includes(tag)"
-              [attr.aria-pressed]="activeTags().includes(tag)"
-              (click)="toggleTag(tag)">
+          @for(tag of allTags(); track tag) {
+            <button type="button" class="tag-chip" [class.tag-chip--active]="activeTags().includes(tag)"
+              [attr.aria-pressed]="activeTags().includes(tag)" (click)="toggleTag(tag)">
               {{ tag }}
             </button>
-          }
-          @if (activeTags().length > 0) {
-            <button type="button" class="tag-chip tag-chip--clear" (click)="activeTags.set([])" aria-label="Quitar todos los filtros">
-              ✕ Quitar filtros
-            </button>
-          }
+            }
+            @if(activeTags().length > 0) {
+              <button type="button" class="tag-chip tag-chip--clear" (click)="activeTags.set([])"
+                aria-label="Quitar todos los filtros">
+                ✕ Quitar filtros
+              </button>
+              }
         </div>
-      }
+        }
     </div>
-  }
+    }
 
-  @if(wheelSegments().length === 0) {
-    <div class="empty-state">
-      @switch (emptyReason()) {
-        @case ('no-places') {
+    @if(wheelSegments().length === 0) {
+      <div class="empty-state">
+        @switch(emptyReason()) {
+          @case('no-places') {
           <span class="empty-icon">🍽️</span>
           <h2>No hay lugares cargados</h2>
           <p>Agregá lugares en la pestaña <strong>📍 Lugares</strong> para comenzar a girar.</p>
-        }
-        @case ('all-excluded') {
+          }
+          @case('all-excluded') {
           <span class="empty-icon">🔄</span>
           <h2>Todos los lugares fueron visitados recientemente</h2>
-          <p>El modo anti-repetición los excluyó. Esperá unos días, adjustá la configuración en <strong>Admin</strong>, o registrá más lugares.</p>
-        }
-        @case ('tag-filter') {
+          <p>El modo anti-repetición los excluyó. Esperá unos días, adjustá la configuración en <strong>Admin</strong>,
+            o registrá más lugares.</p>
+          }
+          @case('tag-filter') {
           <span class="empty-icon">🏷️</span>
           <h2>Sin coincidencias</h2>
           <p>Ningún lugar disponible tiene los tags seleccionados. Probá con otros o quitá el filtro.</p>
-        }
-      }
-    </div>
-    } @else {
-    <div class="wheel-area">
-      <!-- Arrow pointer -->
-      <div class="arrow-wrapper" aria-hidden="true">
-        <div class="arrow"></div>
+          }
+          }
       </div>
+      } @else {
+      <div class="wheel-area">
+        <!-- Arrow pointer -->
+        <div class="arrow-wrapper" aria-hidden="true">
+          <div class="arrow"></div>
+        </div>
 
-      <!-- SVG Wheel -->
-      <div class="wheel-wrapper">
-        <svg viewBox="0 0 400 400" class="wheel-svg" [class.spinning]="isSpinning()"
-          [style.transform]="'rotate(' + wheelRotation() + 'deg)'" aria-hidden="true">
+        <!-- SVG Wheel -->
+        <div class="wheel-wrapper">
+          <svg viewBox="0 0 400 400" class="wheel-svg" [class.spinning]="isSpinning()"
+            [style.transform]="'rotate(' + wheelRotation() + 'deg)'" aria-hidden="true">
 
-          @for(seg of wheelSegments(); track seg.id) {
-            <!-- Slice -->
-            <path [attr.d]="seg.path" [attr.fill]="seg.color" stroke="white" stroke-width="2"
-              [attr.opacity]="seg.isNuevo ? '1' : '0.9'" />
+            @for(seg of wheelSegments(); track seg.id) {
+              <!-- Slice -->
+              <path [attr.d]="seg.path" [attr.fill]="seg.color" stroke="white" stroke-width="2"
+                [attr.opacity]="seg.isNuevo ? '1' : '0.9'" />
 
-            <!-- Label -->
-            <g [attr.transform]="'translate(' + seg.textX + ',' + seg.textY + ') rotate(' + seg.textRotation + ')'">
-              <text text-anchor="middle" dominant-baseline="middle" class="seg-label"
-                [class.seg-label--nuevo]="seg.isNuevo">
-                {{ seg.label }}
-              </text>
-            </g>
-            }
-
-            <!-- Center cap -->
-            <circle cx="200" cy="200" r="36" fill="white" stroke="#333" stroke-width="3" />
-            <text x="200" y="205" text-anchor="middle" dominant-baseline="middle" class="center-icon">🍽️</text>
-        </svg>
-
-        <!-- Spin button -->
-        <button class="spin-button" (click)="spin()" [disabled]="isSpinning() || showNuevoBanner()" type="button"
-          [attr.aria-label]="isSpinning() ? 'Girando ruleta…' : 'Girar la ruleta'">
-          @if(isSpinning()) {
-            <span class="spin-btn-text">…</span>
-            } @else {
-            <span class="spin-btn-text">¡GIRAR!</span>
-            }
-        </button>
-      </div>
-    </div>
-
-    <!-- Nuevo banner -->
-    @if(showNuevoBanner()) {
-      <div class="nuevo-banner" role="status" aria-live="polite">
-        <span class="nuevo-icon">✨</span>
-        <p>¡Modo Nuevo activado! Eligiendo un lugar que no visitaste…</p>
-      </div>
-      }
-
-      <!-- Result card -->
-      @if(showResult()) {
-        @if(selectedPlace(); as place) {
-          <div class="result-card" role="region" aria-label="Resultado de la ruleta">
-            @if(isNewPlace()) {
-              <div class="badge badge--new">🆕 ¡Lugar Nuevo!</div>
+              <!-- Label -->
+              <g [attr.transform]="'translate(' + seg.textX + ',' + seg.textY + ') rotate(' + seg.textRotation + ')'">
+                <text text-anchor="middle" dominant-baseline="middle" class="seg-label"
+                  [class.seg-label--nuevo]="seg.isNuevo">
+                  {{ seg.label }}
+                </text>
+              </g>
               }
-              <p class="result-subtitle">¡Hoy almorzás en…</p>
-              <h2 class="result-name">{{ place.name }}</h2>
 
-              @if(place.tags.length > 0) {
-                <div class="tags">
-                  @for(tag of place.tags; track tag) {
-                    <span class="tag">{{ tag }}</span>
-                    }
-                </div>
+              <!-- Center cap -->
+              <circle cx="200" cy="200" r="36" fill="white" stroke="#333" stroke-width="3" />
+              <text x="200" y="205" text-anchor="middle" dominant-baseline="middle" class="center-icon">🍽️</text>
+          </svg>
+
+          <!-- Spin button -->
+          <button class="spin-button" (click)="spin()" [disabled]="isSpinning() || showNuevoBanner()" type="button"
+            [attr.aria-label]="isSpinning() ? 'Girando ruleta…' : 'Girar la ruleta'">
+            @if(isSpinning()) {
+              <span class="spin-btn-text">…</span>
+              } @else {
+              <span class="spin-btn-text">¡GIRAR!</span>
+              }
+          </button>
+        </div>
+      </div>
+
+      <!-- Nuevo banner -->
+      @if(showNuevoBanner()) {
+        <div class="nuevo-banner" role="status" aria-live="polite">
+          <span class="nuevo-icon">✨</span>
+          <p>¡Modo Nuevo activado! Eligiendo un lugar que no visitaste…</p>
+        </div>
+        }
+
+        <!-- Result card -->
+        @if(showResult()) {
+          @if(selectedPlace(); as place) {
+            <div class="result-card" role="region" aria-label="Resultado de la ruleta">
+              @if(isNewPlace()) {
+                <div class="badge badge--new">🆕 ¡Lugar Nuevo!</div>
                 }
+                <p class="result-subtitle">¡Hoy almorzás en…</p>
+                <h2 class="result-name">{{ place.name }}</h2>
 
-                <div class="result-stats">
-                  <div class="stat">
-                    <span class="stat-icon">🍽️</span>
-                    <span class="stat-label">Visitas:</span>
-                    <span class="stat-value">{{ place.visits.length }}</span>
+                @if(place.tags.length > 0) {
+                  <div class="tags">
+                    @for(tag of place.tags; track tag) {
+                      <span class="tag">{{ tag }}</span>
+                      }
+                  </div>
+                  }
+
+                  <div class="result-stats">
+                    <div class="stat">
+                      <span class="stat-icon">🍽️</span>
+                      <span class="stat-label">Visitas:</span>
+                      <span class="stat-value">{{ place.visits.length }}</span>
+                    </div>
+
+                    @if(getAvgRating(place); as r) {
+                      <div class="stat">
+                        <span class="stat-icon">⭐</span>
+                        <span class="stat-label">Rating promedio:</span>
+                        <span class="stat-value">{{ r.toFixed(1) }}/10</span>
+                      </div>
+                      }
+
+                      @if(getAvgCost(place); as c) {
+                        <div class="stat">
+                          <span class="stat-icon">💰</span>
+                          <span class="stat-label">Gasto promedio:</span>
+                          <span class="stat-value">${{ c.toFixed(0) }}</span>
+                        </div>
+                        }
                   </div>
 
-                  @if(getAvgRating(place); as r) {
-                    <div class="stat">
-                      <span class="stat-icon">⭐</span>
-                      <span class="stat-label">Rating promedio:</span>
-                      <span class="stat-value">{{ r.toFixed(1) }}/10</span>
+                  @if(selectedPlaceUserStats().length > 0) {
+                    <div class="user-stats" aria-label="Historial del equipo en este lugar">
+                      <div class="user-stats-title">🗣️ Historial del equipo</div>
+                      @for(s of selectedPlaceUserStats(); track s.userId) {
+                        <div class="user-stat-row">
+                          <span class="user-stat-name" [class.user-stat-name--me]="s.isMe">
+                            {{ s.displayName }}{{ s.isMe ? ' (vos)' : '' }}
+                          </span>
+                          <div class="user-stat-bar-track">
+                            <div class="user-stat-bar-fill" [style.width.%]="(s.avgRating / 10) * 100"
+                              [style.background]="ratingColor(s.avgRating)">
+                            </div>
+                          </div>
+                          <span class="user-stat-rating" [style.color]="ratingColor(s.avgRating)"
+                            [attr.aria-label]="'Rating ' + s.avgRating">{{ s.avgRating }}</span>
+                          <span class="user-stat-cost">${{ s.avgCost.toLocaleString('es-AR') }}</span>
+                          <span class="user-stat-count">{{ s.count }}×</span>
+                        </div>
+                        }
                     </div>
                     }
 
-                    @if(getAvgCost(place); as c) {
-                      <div class="stat">
-                        <span class="stat-icon">💰</span>
-                        <span class="stat-label">Gasto promedio:</span>
-                        <span class="stat-value">${{ c.toFixed(0) }}</span>
-                      </div>
-                      }
-                </div>
+                    <div class="result-actions">
+                      <button class="btn-spin-again" (click)="resetSpin()" type="button">
+                        Girar de nuevo
+                      </button>
+                      <button class="btn-blacklist" (click)="blacklistAndRespin(place.id)" type="button"
+                        aria-label="Excluir este lugar por 7 días y girar de nuevo">
+                        🚫 No ir esta semana
+                      </button>
+                    </div>
 
-                @if (selectedPlaceUserStats().length > 0) {
-                  <div class="user-stats" aria-label="Historial del equipo en este lugar">
-                    <div class="user-stats-title">🗣️ Historial del equipo</div>
-                    @for (s of selectedPlaceUserStats(); track s.userId) {
-                      <div class="user-stat-row">
-                        <span class="user-stat-name" [class.user-stat-name--me]="s.isMe">
-                          {{ s.displayName }}{{ s.isMe ? ' (vos)' : '' }}
-                        </span>
-                        <div class="user-stat-bar-track">
-                          <div class="user-stat-bar-fill"
-                            [style.width.%]="(s.avgRating / 10) * 100"
-                            [style.background]="ratingColor(s.avgRating)">
-                          </div>
-                        </div>
-                        <span class="user-stat-rating" [style.color]="ratingColor(s.avgRating)"
-                          [attr.aria-label]="'Rating ' + s.avgRating">{{ s.avgRating }}</span>
-                        <span class="user-stat-cost">${{ s.avgCost.toLocaleString('es-AR') }}</span>
-                        <span class="user-stat-count">{{ s.count }}×</span>
+                    @if (place.lat && place.lng) {
+                      <div class="result-map-links">
+                        <a [routerLink]="['/map']" [queryParams]="{ place: place.id }" class="btn-map-view">
+                          🗺️ Ver en mapa
+                        </a>
+                        <a [href]="mapsUrl(place)" target="_blank" rel="noopener noreferrer" class="btn-gmaps">
+                          📍 Google Maps ↗
+                        </a>
                       </div>
                     }
-                  </div>
-                }
-
-                <div class="result-actions">
-                  <button class="btn-spin-again" (click)="resetSpin()" type="button">
-                    Girar de nuevo
-                  </button>
-                  <button class="btn-blacklist" (click)="blacklistAndRespin(place.id)" type="button"
-                    aria-label="Excluir este lugar por 7 días y girar de nuevo">
-                    🚫 No ir esta semana
-                  </button>
-                </div>
-          </div>
-          }
-          }
-          }
+            </div>
+            }
+            }
+            }
 </div>

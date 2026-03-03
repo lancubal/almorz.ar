@@ -1,0 +1,90 @@
+<div class="map-page">
+  <h2>🗺️ Mapa de Lugares</h2>
+
+  @if (!mapsService.configured) {
+    <div class="notice notice--warn">
+      <strong>⚠️ API Key no configurada</strong>
+      <p>
+        Para usar el mapa, configurá tu Google Maps API Key en
+        <code>src/environments/environment.ts</code>.
+      </p>
+      <ol>
+        <li>Abrí <a href="https://console.cloud.google.com/" target="_blank" rel="noopener">Google Cloud Console</a></li>
+        <li>Habilitá <strong>Maps JavaScript API</strong> y <strong>Places API</strong></li>
+        <li>Creá una API Key en <em>Credentials</em></li>
+        <li>Pegála en <code>environment.googleMapsApiKey</code></li>
+        <li>Reiniciá la app</li>
+      </ol>
+    </div>
+  } @else if (!mapsService.ready()) {
+    <div class="loading" aria-live="polite">
+      <span class="spinner" aria-hidden="true"></span>
+      Cargando mapa…
+    </div>
+  } @else {
+    <div class="map-wrapper">
+      <google-map
+        [options]="mapOptions()"
+        width="100%"
+        height="460px"
+        aria-label="Mapa de lugares de comida">
+
+        @for (place of mappedPlaces(); track place.id; let i = $index) {
+          <map-marker
+            [position]="{ lat: place.lat!, lng: place.lng! }"
+            [options]="markerOptions(place)"
+            (mapClick)="openInfoWindow(i, place)">
+          </map-marker>
+        }
+
+        <map-info-window>
+          @if (selectedPlace(); as p) {
+            <div class="info-window">
+              <strong class="info-name">{{ p.name }}</strong>
+              @if (p.address) {
+                <p class="info-address">{{ p.address }}</p>
+              }
+              <div class="info-stats">
+                <span>⭐ {{ getAvgRating(p) }}/10</span>
+                <span>💰 ${{ getAvgCost(p) }}</span>
+                <span>🍽️ {{ p.visits.length }} visitas</span>
+              </div>
+              @if (p.tags.length > 0) {
+                <div class="info-tags">
+                  @for (tag of p.tags; track tag) {
+                    <span class="info-tag">{{ tag }}</span>
+                  }
+                </div>
+              }
+              <a class="info-gmaps-link" [href]="mapsUrl(p)" target="_blank" rel="noopener">
+                Abrir en Google Maps ↗
+              </a>
+            </div>
+          }
+        </map-info-window>
+
+      </google-map>
+    </div>
+
+    @if (unmappedPlaces().length > 0) {
+      <div class="unmapped-section">
+        <h3>Sin ubicación cargada ({{ unmappedPlaces().length }})</h3>
+        <ul class="unmapped-list">
+          @for (p of unmappedPlaces(); track p.id) {
+            <li>{{ p.name }}</li>
+          }
+        </ul>
+        <p class="unmapped-hint">
+          Editá estos lugares en <strong>📍 Lugares</strong> y buscalos en Google Maps para agregar su ubicación.
+        </p>
+      </div>
+    }
+
+    @if (mappedPlaces().length === 0) {
+      <div class="notice notice--info">
+        <strong>📍 Ningún lugar tiene ubicación cargada todavía</strong>
+        <p>Editá los lugares en la pestaña <strong>Lugares</strong> y usá el buscador de Google Maps para asignarles coordenadas.</p>
+      </div>
+    }
+  }
+</div>

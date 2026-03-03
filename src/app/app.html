@@ -1,42 +1,45 @@
-@if (!currentUser() && userIsReady() && !isAdminRoute()) {
+@if(!currentUser() && userIsReady() && !isAdminRoute()) {
   <app-user-setup />
-}
+  }
 
-<div class="app-container">
-  <header class="app-header">
-    <div class="header-top">
-      <div>
-        <h1>🍽️ Almorz.ar</h1>
-        <p class="app-subtitle">¿Dónde almorzamos hoy?</p>
-      </div>
-      @if (currentUser()) {
-        <div class="user-chip">
-          <span class="user-name" aria-label="Usuario actual">{{ currentUser()!.displayName }}</span>
-          <button class="logout-btn" type="button" (click)="logout()" aria-label="Cambiar usuario">Cambiar</button>
+  <div class="app-container">
+    <header class="app-header">
+      <div class="header-top">
+        <div>
+          <h1>🍽️ Almorz.ar</h1>
+          <p class="app-subtitle">¿Dónde almorzamos hoy?</p>
         </div>
-      }
-    </div>
-  </header>
+        @if(currentUser()) {
+          <div class="user-chip">
+            <span class="user-name" aria-label="Usuario actual">{{ currentUser()!.displayName }}</span>
+            <button class="logout-btn" type="button" (click)="logout()" aria-label="Cambiar usuario">Cambiar</button>
+          </div>
+          }
+      </div>
+    </header>
 
-  <nav class="app-nav" aria-label="Navegación principal">
-    <a class="nav-tab" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-      🎰 Ruleta
-    </a>
-    <a class="nav-tab" routerLink="/visits" routerLinkActive="active">
-      📝 Registrar
-    </a>
-    <a class="nav-tab" routerLink="/history" routerLinkActive="active">
-      📋 Historial
-    </a>
-    <a class="nav-tab" routerLink="/stats" routerLinkActive="active">
-      📊 Stats
-    </a>
-    <a class="nav-tab" routerLink="/places" routerLinkActive="active">
-      📍 Lugares
-    </a>
-  </nav>
+    <nav class="app-nav" aria-label="Navegación principal">
+      <a class="nav-tab" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        🎰 Ruleta
+      </a>
+      <a class="nav-tab" routerLink="/visits" routerLinkActive="active">
+        📝 Registrar
+      </a>
+      <a class="nav-tab" routerLink="/history" routerLinkActive="active">
+        📋 Historial
+      </a>
+      <a class="nav-tab" routerLink="/stats" routerLinkActive="active">
+        📊 Stats
+      </a>
+      <a class="nav-tab" routerLink="/places" routerLinkActive="active">
+        📍 Lugares
+      </a>
+      <a class="nav-tab" routerLink="/map" routerLinkActive="active">
+        🗺️ Mapa
+      </a>
+    </nav>
 
-  <main class="app-main">
-    <router-outlet />
-  </main>
-</div>
+    <main class="app-main">
+      <router-outlet />
+    </main>
+  </div>

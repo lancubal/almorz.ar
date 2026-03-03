@@ -1,7 +1,7 @@
 import { inject, Injectable, signal, computed, effect } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap, switchMap, map, catchError, of, forkJoin } from 'rxjs';
-import { Place, Visit, PlaceWithWeight, UserSettings, VisitEntry } from '../models/place.model';
+import { Place, Visit, PlaceWithWeight, UserSettings, VisitEntry, PlaceLocation } from '../models/place.model';
 import { UserService } from './user.service';
 
 const API = 'http://localhost:3001';
@@ -107,7 +107,7 @@ export class PlacesService {
 
   // --- Place CRUD -------------------------------------------------------------
 
-  addPlace(name: string, tags: string[]): Observable<void> {
+  addPlace(name: string, tags: string[], location?: PlaceLocation): Observable<void> {
     const newPlace: Place = {
       id: crypto.randomUUID(),
       name,
@@ -115,16 +115,17 @@ export class PlacesService {
       visits: [],
       lastVisitDate: null,
       createdAt: new Date(),
+      ...(location ?? {}),
     };
     return this.http.post<Place>(`${API}/places`, newPlace).pipe(
       switchMap(() => this.refreshPlaces()),
     );
   }
 
-  updatePlace(id: string, name: string, tags: string[]): Observable<void> {
+  updatePlace(id: string, name: string, tags: string[], location?: PlaceLocation): Observable<void> {
     const existing = this.placesSignal().find(p => p.id === id);
     if (!existing) return of(void 0);
-    return this.http.put<Place>(`${API}/places/${id}`, { ...existing, name, tags }).pipe(
+    return this.http.put<Place>(`${API}/places/${id}`, { ...existing, name, tags, ...(location ?? {}) }).pipe(
       switchMap(() => this.refreshPlaces()),
     );
   }
@@ -297,4 +298,3 @@ export class PlacesService {
     });
   }
 }
-
