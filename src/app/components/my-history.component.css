@@ -4,10 +4,52 @@
   padding: 2rem 1rem;
 }
 
+.history-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
 h2 {
   color: #333;
-  margin: 0 0 1.5rem;
+  margin: 0;
   font-size: 1.4rem;
+}
+
+/* Toggle */
+.toggle-group {
+  display: flex;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1.5px solid #667eea;
+}
+
+.toggle-btn {
+  padding: 0.35rem 0.85rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  background: white;
+  color: #667eea;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.toggle-btn + .toggle-btn {
+  border-left: 1.5px solid #667eea;
+}
+
+.toggle-btn--active {
+  background: #667eea;
+  color: white;
+}
+
+.toggle-btn:focus-visible {
+  outline: 2px solid #4f46e5;
+  outline-offset: 2px;
 }
 
 /* ── Summary row ────────────────────────────────────────────── */
@@ -116,11 +158,29 @@ h2 {
   gap: 0.45rem;
 }
 
+.tl-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
 .tl-place {
   font-weight: 700;
   color: #1a1a1a;
   font-size: 0.97rem;
   line-height: 1.25;
+}
+
+.tl-user {
+  background: #ede9fe;
+  color: #6d28d9;
+  border-radius: 6px;
+  padding: 0.1rem 0.45rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 /* Rating bar */

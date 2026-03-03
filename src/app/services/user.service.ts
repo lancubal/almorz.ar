@@ -11,11 +11,23 @@ export class UserService {
   private readonly http = inject(HttpClient);
 
   private readonly currentUserSignal = signal<User | null>(null);
+  private readonly usersMapSignal = signal<Record<string, string>>({});
+
   readonly currentUser = this.currentUserSignal.asReadonly();
+  /** userId → displayName map, populated on construction */
+  readonly usersMap = this.usersMapSignal.asReadonly();
   /** true once the initial localStorage check is resolved */
   readonly isReady = signal(false);
 
   constructor() {
+    this.http.get<User[]>(`${API}/users`)
+      .pipe(catchError(() => of([])))
+      .subscribe(users => {
+        const map: Record<string, string> = {};
+        for (const u of users) map[u.id] = u.displayName;
+        this.usersMapSignal.set(map);
+      });
+
     const savedId = localStorage.getItem(STORAGE_KEY);
     if (savedId) {
       this.http.get<User>(`${API}/users/${savedId}`)

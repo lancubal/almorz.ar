@@ -1,10 +1,28 @@
 <div class="history-container">
-  <h2>📋 Mi historial</h2>
+  <div class="history-header">
+    <h2>{{ showGlobal() ? '🌐 Historial global' : '📋 Mi historial' }}</h2>
+    <div class="toggle-group" role="group" aria-label="Modo de historial">
+      <button
+        class="toggle-btn"
+        [class.toggle-btn--active]="!showGlobal()"
+        (click)="showGlobal.set(false)"
+        [attr.aria-pressed]="!showGlobal()">
+        Mis visitas
+      </button>
+      <button
+        class="toggle-btn"
+        [class.toggle-btn--active]="showGlobal()"
+        (click)="showGlobal.set(true)"
+        [attr.aria-pressed]="showGlobal()">
+        Global
+      </button>
+    </div>
+  </div>
 
   @if (entries().length === 0) {
     <div class="empty">
       <span class="icon" aria-hidden="true">🍽️</span>
-      <p>Todavía no registraste ninguna visita.</p>
+      <p>Todavía no hay visitas registradas.</p>
     </div>
   } @else {
     <div class="summary-row" role="region" aria-label="Resumen de visitas">
@@ -26,7 +44,7 @@
       </div>
     </div>
 
-    <div class="timeline" role="list" aria-label="Historial de visitas">
+    <div class="timeline" role="list" [attr.aria-label]="showGlobal() ? 'Historial global' : 'Mis visitas'">
       @for (entry of entries(); track $index) {
         <div class="tl-item" role="listitem">
           <div class="tl-date" aria-label="Fecha">{{ formatShortDate(entry.visit.date) }}</div>
@@ -37,7 +55,12 @@
           </div>
 
           <div class="tl-card">
-            <div class="tl-place">{{ entry.placeName }}</div>
+            <div class="tl-card-header">
+              <div class="tl-place">{{ entry.placeName }}</div>
+              @if (showGlobal()) {
+                <span class="tl-user">{{ userName(entry.visit.userId) }}</span>
+              }
+            </div>
 
             <div class="tl-rating" [attr.aria-label]="'Rating ' + entry.visit.rating + ' de 10'">
               <div class="tl-rating-track">

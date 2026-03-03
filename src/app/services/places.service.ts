@@ -257,6 +257,13 @@ export class PlacesService {
       .sort((a, b) => new Date(b.visit.date).getTime() - new Date(a.visit.date).getTime());
   }
 
+  /** Returns all visits from all users, newest first */
+  getAllVisits(): VisitEntry[] {
+    return this.placesSignal()
+      .flatMap(p => p.visits.map(v => ({ placeName: p.name, placeId: p.id, visit: v })))
+      .sort((a, b) => new Date(b.visit.date).getTime() - new Date(a.visit.date).getTime());
+  }
+
   // --- Weight calculation ---------------------------------------------------
   // Weights are global � based on visits from ALL users combined
 
