@@ -32,6 +32,61 @@
   margin: 0;
 }
 
+/* ─── Tag filter ─────────────────────────────────────────────────────────────── */
+.tag-filter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  justify-content: center;
+  padding: 0.5rem 1rem 0.75rem;
+}
+
+.tag-filter-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-right: 0.2rem;
+}
+
+.tag-chip {
+  border: 2px solid #e2e8f0;
+  border-radius: 999px;
+  background: white;
+  color: #555;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.3rem 0.85rem;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  line-height: 1.4;
+}
+
+.tag-chip:hover:not(.tag-chip--active):not(.tag-chip--clear) {
+  border-color: #667eea;
+  color: #667eea;
+}
+
+.tag-chip--active {
+  background: #667eea;
+  border-color: #667eea;
+  color: white;
+}
+
+.tag-chip--clear {
+  border-color: #e2e8f0;
+  background: #f8fafc;
+  color: #999;
+  font-weight: 500;
+}
+
+.tag-chip--clear:hover {
+  border-color: #ccc;
+  color: #555;
+}
+
 /* ─── Wheel area ────────────────────────────────────────────────────────────── */
 .wheel-area {
   display: flex;

@@ -42,6 +42,7 @@ export class RouletteComponent {
   protected readonly wheelRotation = signal(0);
   protected readonly selectedPlace = signal<PlaceWithWeight | null>(null);
   protected readonly isNewPlace = signal(false);
+  protected readonly activeTags = signal<string[]>([]);
 
   protected readonly isSpinning = computed(
     () => this.spinState() === 'spinning-normal' || this.spinState() === 'spinning-nuevo',
@@ -49,9 +50,23 @@ export class RouletteComponent {
   protected readonly showNuevoBanner = computed(() => this.spinState() === 'nuevo-pause');
   protected readonly showResult = computed(() => this.spinState() === 'done');
 
+  /** All unique tags across all places, sorted. */
+  protected readonly allTags = computed(() => {
+    const tags = new Set<string>();
+    this.placesService.places().forEach(p => p.tags.forEach(t => tags.add(t)));
+    return [...tags].sort();
+  });
+
+  private readonly filteredEligible = computed(() => {
+    const eligible = this.placesService.getEligiblePlaces();
+    const active = this.activeTags();
+    if (active.length === 0) return eligible;
+    return eligible.filter(p => p.tags.some(t => active.includes(t)));
+  });
+
   // ─── Wheel segments ───────────────────────────────────────────────────────
   protected readonly wheelSegments = computed<WheelSegment[]>(() => {
-    const eligible = this.placesService.getEligiblePlaces();
+    const eligible = this.filteredEligible();
     if (eligible.length === 0) return [];
 
     const avgWeight = eligible.reduce((s, p) => s + p.weight, 0) / eligible.length;
@@ -133,23 +148,37 @@ export class RouletteComponent {
   }
 
   private spinNuevo(): void {
-    const result = this.placesService.selectNewPlace();
-    if (!result) {
+    const active = this.activeTags();
+    const allUnvisited = this.placesService.getUnvisitedPlaces();
+    const unvisited = active.length === 0
+      ? allUnvisited
+      : allUnvisited.filter(p => p.tags.some(t => active.includes(t)));
+
+    const eligible = this.filteredEligible();
+    const pool = unvisited.length > 0 ? unvisited : eligible;
+
+    if (pool.length === 0) {
       this.spinState.set('idle');
       return;
     }
 
-    // Find that place's segment (same wheel) and spin to it
+    const place = this.placesService.selectFromWeighted(pool);
+    if (!place) {
+      this.spinState.set('idle');
+      return;
+    }
+
+    // Find that place’s segment (same wheel) and spin to it
     const segments = this.wheelSegments();
-    const target = segments.find(s => s.id === result.place.id) ?? segments[0];
+    const target = segments.find(s => s.id === place.id) ?? segments[0];
 
     this.animateTo(target.midAngle);
     this.spinState.set('spinning-nuevo');
 
     setTimeout(() => {
-      this.selectedPlace.set(result.place);
-      this.isNewPlace.set(result.wasUnvisited);
-      this.placesService.setLastSelected(result.place.id).subscribe();
+      this.selectedPlace.set(place);
+      this.isNewPlace.set(unvisited.length > 0);
+      this.placesService.setLastSelected(place.id).subscribe();
       this.spinState.set('done');
     }, SPIN_DURATION_MS);
   }
@@ -165,6 +194,12 @@ export class RouletteComponent {
     this.spinState.set('idle');
     this.selectedPlace.set(null);
     this.isNewPlace.set(false);
+  }
+
+  protected toggleTag(tag: string): void {
+    this.activeTags.update(current =>
+      current.includes(tag) ? current.filter(t => t !== tag) : [...current, tag]
+    );
   }
 
   protected blacklistAndRespin(placeId: string): void {

@@ -1,9 +1,36 @@
 <div class="roulette-container">
+  @if (allTags().length > 0) {
+    <div class="tag-filter" role="group" aria-label="Filtrar por categoría">
+      <span class="tag-filter-label">Filtrar:</span>
+      @for (tag of allTags(); track tag) {
+        <button
+          type="button"
+          class="tag-chip"
+          [class.tag-chip--active]="activeTags().includes(tag)"
+          [attr.aria-pressed]="activeTags().includes(tag)"
+          (click)="toggleTag(tag)">
+          {{ tag }}
+        </button>
+      }
+      @if (activeTags().length > 0) {
+        <button type="button" class="tag-chip tag-chip--clear" (click)="activeTags.set([])" aria-label="Quitar filtros">
+          ✕ Todos
+        </button>
+      }
+    </div>
+  }
+
   @if(wheelSegments().length === 0) {
     <div class="empty-state">
-      <span class="empty-icon">🍽️</span>
-      <h2>No hay lugares disponibles</h2>
-      <p>Agregá lugares en la pestaña <strong>📍 Lugares</strong> para comenzar a girar.</p>
+      @if (activeTags().length > 0) {
+        <span class="empty-icon">🏷️</span>
+        <h2>Sin coincidencias</h2>
+        <p>Ningún lugar disponible tiene los tags seleccionados. Probá con otros tags o quitá el filtro.</p>
+      } @else {
+        <span class="empty-icon">🍽️</span>
+        <h2>No hay lugares disponibles</h2>
+        <p>Agregá lugares en la pestaña <strong>📍 Lugares</strong> para comenzar a girar.</p>
+      }
     </div>
     } @else {
     <div class="wheel-area">
