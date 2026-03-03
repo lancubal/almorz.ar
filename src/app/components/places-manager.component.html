@@ -15,7 +15,10 @@
         <div class="form-group">
           <label for="name">Nombre del lugar *</label>
           <input type="text" id="name" formControlName="name" placeholder="Ej: La Esquina del Bife"
-            class="form-control">
+            class="form-control" [class.input-warning]="duplicateWarning()">
+          @if (duplicateWarning()) {
+            <p class="field-warning" role="alert">⚠️ {{ duplicateWarning() }}</p>
+          }
         </div>
 
         <div class="form-group">
@@ -29,7 +32,7 @@
           <button type="button" class="btn btn-secondary" (click)="cancelForm()">
             Cancelar
           </button>
-          <button type="submit" class="btn btn-primary" [disabled]="!placeForm.valid">
+          <button type="submit" class="btn btn-primary" [disabled]="!placeForm.valid || !!duplicateWarning()">
             {{ editingPlace() ? 'Guardar' : 'Crear' }}
           </button>
         </div>

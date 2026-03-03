@@ -198,11 +198,21 @@
       "createdAt": "2026-03-03T13:51:12.535Z"
     }
   ],
-  "users": [],
+  "users": [
+    {
+      "id": "agus",
+      "displayName": "Agus",
+      "createdAt": "2026-03-03T14:17:38.563Z"
+    }
+  ],
   "settings": [
     {
       "id": "1",
       "lastSelectedId": "b8db2ebf-cf64-4cf4-988b-5f1536f058d4"
+    },
+    {
+      "id": "agus",
+      "lastSelectedId": "49332387-c3ea-487e-becd-60e74200c2bd"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

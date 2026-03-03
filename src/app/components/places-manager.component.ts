@@ -1,4 +1,5 @@
-import { Component, signal, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, signal, inject, computed, ChangeDetectionStrategy } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PlacesService } from '../services/places.service';
 import { Place } from '../models/place.model';
@@ -19,7 +20,19 @@ export class PlacesManagerComponent {
 
   protected readonly placeForm = new FormGroup({
     name: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    tags: new FormControl('', { nonNullable: true })
+    tags: new FormControl('', { nonNullable: true }),
+  });
+
+  // Reactive duplicate detection: warns if a place with the same normalised name exists
+  private readonly nameValue = toSignal(this.placeForm.controls.name.valueChanges, { initialValue: '' });
+  protected readonly duplicateWarning = computed(() => {
+    const name = this.nameValue().trim().toLowerCase();
+    if (name.length < 2) return null;
+    const editingId = this.editingPlace()?.id;
+    const match = this.places().find(
+      p => p.name.trim().toLowerCase() === name && p.id !== editingId,
+    );
+    return match ? `Ya existe un lugar llamado "${match.name}".` : null;
   });
 
   protected showAddForm(): void {

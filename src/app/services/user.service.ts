@@ -52,6 +52,16 @@ export class UserService {
     );
   }
 
+  /** Select an already-known user directly (no slugification needed). */
+  loginWithUser(user: User): void {
+    this.currentUserSignal.set(user);
+    localStorage.setItem(STORAGE_KEY, user.id);
+  }
+
+  getAll(): Observable<User[]> {
+    return this.http.get<User[]>(`${API}/users`).pipe(catchError(() => of([])));
+  }
+
   logout(): void {
     this.currentUserSignal.set(null);
     localStorage.removeItem(STORAGE_KEY);
