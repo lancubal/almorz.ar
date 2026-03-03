@@ -26,6 +26,14 @@
           <input type="text" id="tags" formControlName="tags" placeholder="Ej: parrilla, económico, rápido"
             class="form-control">
           <small class="form-hint">Usa tags para categorizar: tipo de comida, precio, etc.</small>
+          @if (suggestedTags().length > 0) {
+            <div class="tag-suggestions" aria-label="Tags ya usados">
+              <span class="tag-suggestions-label">Agregar:</span>
+              @for (tag of suggestedTags(); track tag) {
+                <button type="button" class="tag-suggestion-chip" (click)="appendTag(tag)">+ {{ tag }}</button>
+              }
+            </div>
+          }
         </div>
 
         <div class="form-actions">

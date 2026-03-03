@@ -24,6 +24,23 @@ export class PlacesManagerComponent {
     tags: new FormControl('', { nonNullable: true }),
   });
 
+  // All unique tags used across all existing places
+  protected readonly allExistingTags = computed(() => {
+    const tags = new Set<string>();
+    this.places().forEach(p => p.tags.forEach(t => tags.add(t)));
+    return [...tags].sort();
+  });
+
+  // Tags that are not already in the current field value
+  private readonly currentTagsValue = toSignal(this.placeForm.controls.tags.valueChanges, { initialValue: '' });
+  protected readonly suggestedTags = computed(() => {
+    const entered = this.currentTagsValue()
+      .split(',')
+      .map(t => t.trim().toLowerCase())
+      .filter(t => t.length > 0);
+    return this.allExistingTags().filter(t => !entered.includes(t.toLowerCase()));
+  });
+
   // Reactive duplicate detection: warns if a place with the same normalised name exists
   private readonly nameValue = toSignal(this.placeForm.controls.name.valueChanges, { initialValue: '' });
   protected readonly duplicateWarning = computed(() => {
@@ -77,6 +94,12 @@ export class PlacesManagerComponent {
         next: () => this.cancelForm()
       });
     }
+  }
+
+  protected appendTag(tag: string): void {
+    const current = this.placeForm.controls.tags.value.trim();
+    const newValue = current.length > 0 ? `${current}, ${tag}` : tag;
+    this.placeForm.controls.tags.setValue(newValue);
   }
 
   protected deletePlace(id: string): void {
