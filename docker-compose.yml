@@ -1,0 +1,21 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    ports:
+      - "3001:3001"   # opcional — útil para debugging local
+    volumes:
+      - ./db.json:/app/db.json   # bind mount → datos persisten en el host
+                                  # en AWS: reemplazar por un volumen EFS
+    restart: unless-stopped

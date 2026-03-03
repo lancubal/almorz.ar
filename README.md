@@ -162,12 +162,50 @@ Posibles mejoras ordenadas por impacto:
 ## 🛠️ Comandos útiles
 
 ```bash
-npm start              # Angular (4200) + json-server (3001)
+npm start              # Angular (4200) + json-server (3001) — desarrollo local
 npm run api            # Solo json-server
 ng serve               # Solo Angular
 ng build               # Build de producción
 ng test                # Unit tests con Vitest
 ```
+
+---
+
+## 🐳 Docker
+
+### Desarrollo local con Docker
+
+```bash
+# Construir y levantar ambos contenedores
+docker compose up --build
+
+# App disponible en http://localhost
+```
+
+### Servicios
+
+| Servicio | Imagen base | Puerto | Descripción |
+|---|---|---|---|
+| `web` | nginx:alpine | 80 | Angular compilado + proxy reverso |
+| `api` | node:22-alpine | 3001 | json-server — REST API |
+
+nginx actúa de proxy: las llamadas a `/api/*` se redirigen internamente al contenedor `api:3001`, por lo que la app Angular no necesita conocer ninguna URL de backend externa.
+
+Los datos persisten en `./db.json` (bind mount). En AWS se reemplaza por un volumen EFS.
+
+---
+
+## ☁️ Deploy en AWS (ECS Fargate)
+
+1. **ECR** — Crear dos repositorios y subir las imágenes:
+   ```bash
+   docker build -t almorz-web .
+   docker build -f Dockerfile.api -t almorz-api .
+   # tag + push a ECR...
+   ```
+2. **EFS** — Crear un sistema de archivos para persistir `db.json` y montarlo en la task definition del contenedor `api` en `/app/db.json`.
+3. **ECS Task Definition** — Dos contenedores en la misma task (equivalente al `docker-compose.yml`).
+4. **ALB** — Application Load Balancer apuntando al contenedor `web` (puerto 80).
 
 ---
 

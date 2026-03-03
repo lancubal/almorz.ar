@@ -4,7 +4,7 @@ import { Observable, tap, switchMap, map, catchError, of, forkJoin } from 'rxjs'
 import { Place, Visit, PlaceWithWeight, UserSettings, VisitEntry } from '../models/place.model';
 import { UserService } from './user.service';
 
-const API = 'http://localhost:3001';
+const API = '/api';
 
 @Injectable({ providedIn: 'root' })
 export class PlacesService {
