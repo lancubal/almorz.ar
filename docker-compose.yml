@@ -6,10 +6,10 @@ services:
     ports:
       - "8080:80"   # el nginx principal de luna-lancuba.dev hace proxy a este puerto
     depends_on:
-      - api
+      - almorz-api
     restart: unless-stopped
 
-  api:
+  almorz-api:
     build:
       context: .
       dockerfile: Dockerfile.api
