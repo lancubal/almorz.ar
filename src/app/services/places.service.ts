@@ -173,11 +173,20 @@ export class PlacesService {
     const antiDays = this.antiRepeatDaysSignal();
     const cutoff = antiDays > 0 ? new Date(Date.now() - antiDays * 86_400_000) : null;
     const blacklist = this.userBlacklistSignal();
+    const userId = this.userService.currentUser()?.id;
     return this.placesWithWeights().filter(p => {
       if (p.id === lastId) return false;
       if (p.weight <= 0) return false;
       if (blacklist[p.id] && new Date(blacklist[p.id]) > now) return false;
-      if (cutoff && p.lastVisitDate && new Date(p.lastVisitDate) > cutoff) return false;
+      if (cutoff && userId) {
+        const userVisits = p.visits.filter(v => v.userId === userId);
+        if (userVisits.length > 0) {
+          const lastUserVisit = userVisits.reduce((latest, v) =>
+            new Date(v.date) > new Date(latest.date) ? v : latest
+          );
+          if (new Date(lastUserVisit.date) > cutoff) return false;
+        }
+      }
       return true;
     });
   }

@@ -145,7 +145,7 @@ Posibles mejoras ordenadas por impacto:
 - [x] **Modo anti-repetición semanal** — no volver al mismo lugar dentro de X días configurables (desde Admin)
 
 ### Features de usabilidad
-- [ ] **Historial visual** — timeline de visitas con costo y rating
+- [x] **Historial visual** — timeline de visitas con costo y rating
 - [ ] **Estadísticas / analytics** — gasto mensual, lugar favorito, rating promedio por tag
 - [ ] **Exportar / importar datos** — backup y restauración del `db.json` desde la UI
 - [ ] **Mapa de lugares** — link a Google Maps para cada lugar
