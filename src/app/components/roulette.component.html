@@ -150,6 +150,29 @@
                       }
                 </div>
 
+                @if (selectedPlaceUserStats().length > 0) {
+                  <div class="user-stats" aria-label="Historial del equipo en este lugar">
+                    <div class="user-stats-title">🗣️ Historial del equipo</div>
+                    @for (s of selectedPlaceUserStats(); track s.userId) {
+                      <div class="user-stat-row">
+                        <span class="user-stat-name" [class.user-stat-name--me]="s.isMe">
+                          {{ s.displayName }}{{ s.isMe ? ' (vos)' : '' }}
+                        </span>
+                        <div class="user-stat-bar-track">
+                          <div class="user-stat-bar-fill"
+                            [style.width.%]="(s.avgRating / 10) * 100"
+                            [style.background]="ratingColor(s.avgRating)">
+                          </div>
+                        </div>
+                        <span class="user-stat-rating" [style.color]="ratingColor(s.avgRating)"
+                          [attr.aria-label]="'Rating ' + s.avgRating">{{ s.avgRating }}</span>
+                        <span class="user-stat-cost">${{ s.avgCost.toLocaleString('es-AR') }}</span>
+                        <span class="user-stat-count">{{ s.count }}×</span>
+                      </div>
+                    }
+                  </div>
+                }
+
                 <div class="result-actions">
                   <button class="btn-spin-again" (click)="resetSpin()" type="button">
                     Girar de nuevo

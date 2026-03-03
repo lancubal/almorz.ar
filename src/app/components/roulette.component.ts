@@ -1,5 +1,6 @@
 import { Component, signal, computed, inject, ChangeDetectionStrategy } from '@angular/core';
 import { PlacesService } from '../services/places.service';
+import { UserService } from '../services/user.service';
 import { PlaceWithWeight } from '../models/place.model';
 
 const COLORS = [
@@ -36,6 +37,7 @@ interface WheelSegment {
 })
 export class RouletteComponent {
   private readonly placesService = inject(PlacesService);
+  private readonly userService = inject(UserService);
 
   // ─── State ────────────────────────────────────────────────────────────────
   protected readonly spinState = signal<SpinState>('idle');
@@ -224,6 +226,36 @@ export class RouletteComponent {
   protected getAvgCost(place: PlaceWithWeight): number | null {
     if (place.visits.length === 0) return null;
     return place.visits.reduce((s, v) => s + v.cost, 0) / place.visits.length;
+  }
+
+  /** Per-user breakdown for the selected place, sorted by visit count desc. */
+  protected readonly selectedPlaceUserStats = computed(() => {
+    const place = this.selectedPlace();
+    if (!place || place.visits.length === 0) return [];
+    const usersMap = this.userService.usersMap();
+    const currentUserId = this.userService.currentUser()?.id;
+    const map = new Map<string, { ratings: number[]; costs: number[] }>();
+    for (const v of place.visits) {
+      if (!map.has(v.userId)) map.set(v.userId, { ratings: [], costs: [] });
+      map.get(v.userId)!.ratings.push(v.rating);
+      map.get(v.userId)!.costs.push(v.cost);
+    }
+    return [...map.entries()]
+      .map(([userId, data]) => ({
+        userId,
+        displayName: usersMap[userId] ?? userId,
+        isMe: userId === currentUserId,
+        count: data.ratings.length,
+        avgRating: Math.round(data.ratings.reduce((s, r) => s + r, 0) / data.ratings.length * 10) / 10,
+        avgCost: Math.round(data.costs.reduce((s, c) => s + c, 0) / data.costs.length),
+      }))
+      .sort((a, b) => b.count - a.count);
+  });
+
+  protected ratingColor(rating: number): string {
+    if (rating >= 8) return '#22c55e';
+    if (rating >= 5) return '#f59e0b';
+    return '#ef4444';
   }
 }
 

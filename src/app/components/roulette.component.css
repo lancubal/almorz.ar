@@ -428,7 +428,81 @@
   background: #fee2e2;
   border-color: #f87171;
 }
+/* ─── Per-user stats in result card ──────────────────────────────────────── */
+.user-stats {
+  margin-top: 0.5rem;
+  border-top: 1.5px solid #f0f0f0;
+  padding-top: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
 
+.user-stats-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.2rem;
+}
+
+.user-stat-row {
+  display: grid;
+  grid-template-columns: 90px 1fr 32px 62px 22px;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.user-stat-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #555;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+
+.user-stat-name--me {
+  color: #667eea;
+}
+
+.user-stat-bar-track {
+  height: 6px;
+  background: #f0f0f0;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.user-stat-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+}
+
+.user-stat-rating {
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-align: right;
+}
+
+.user-stat-cost {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #16a34a;
+  background: #f0fdf4;
+  border-radius: 6px;
+  padding: 0.1rem 0.35rem;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.user-stat-count {
+  font-size: 0.72rem;
+  color: #bbb;
+  font-weight: 600;
+  text-align: right;
+}
 /* ─── Animations ─────────────────────────────────────────────────────────────── */
 @keyframes slideIn {
   from {
