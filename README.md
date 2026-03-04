@@ -1,119 +1,121 @@
-# 🍽️ Almorz.ar
+# Almorz.ar
 
-Una aplicación Angular para decidir dónde ir a comer cada día. Gira la ruleta, que usa un sistema de pesos inteligente para favorecer los mejores lugares según tu historial.
+An Angular app to decide where to go for lunch. Spin the roulette wheel — it uses a smart weighting system that factors in each place's rating, cost, and how long it's been since your last visit, so the best options naturally rise to the top.
+
 
 ---
 
-## ✨ Características
+## Features
 
-| Feature | Descripción |
+| Feature | Description |
 |---|---|
-| 🎰 **Ruleta SVG** | Rueda interactiva con segmentos proporcionales al peso de cada lugar |
-| ✨ **Modo Nuevo** | Un segmento especial que re-gira entre lugares nunca visitados |
-| 📍 **Gestión de Lugares** | CRUD completo con nombre y tags personalizados |
-| 📝 **Registro de Visitas** | Guardá costo y rating (1–10) por visita |
-| ⚖️ **Pesos Inteligentes** | Rating + costo + aging determinan la probabilidad de cada lugar |
-| 🚫 **Sin Repetición** | El último lugar no aparece en la siguiente tirada |
-| 💾 **Persistencia Real** | Base de datos en archivo JSON vía `json-server` — sobrevive reinicios |
+| **SVG Roulette** | Interactive wheel with segments proportional to each place's calculated weight |
+| **New Place mode** | A special segment that triggers a second spin among never-visited places |
+| **Places manager** | Full CRUD — add, edit, delete places with custom tags |
+| **Visit logger** | Record cost and rating (1–10) for every visit |
+| **Smart weights** | Rating + cost + time since last visit determine each segment's probability |
+| **No-repeat rule** | The last selected place is always excluded from the next spin |
+| **Tag filter** | Filter the wheel to a subset of places before spinning (e.g. only "fast" or "cheap") |
+| **Temporary blacklist** | Exclude a place for N days without deleting it |
+| **Anti-repeat cooldown** | Configurable cooldown window — skip a place if visited within the last X days |
+| **Visit history** | Visual timeline of every visit with cost and rating |
+| **Analytics** | Monthly spend, favourite place, average rating per tag |
+| **Real persistence** | JSON file database via `json-server` — survives restarts and redeploys |
 
 ---
 
-## 🚀 Inicio Rápido
+## Quick Start
 
 ```bash
-# 1. Instalar dependencias (solo la primera vez)
+# Install dependencies (first time only)
 npm install
 
-# 2. Arrancar app Angular + API
+# Start Angular dev server + API
 npm start
 ```
 
 - **App:** `http://localhost:4200`
-- **API (json-server):** `http://localhost:3001`
+- **API:** `http://localhost:3001`
 
-> `npm start` usa `concurrently` para correr `ng serve` y `json-server` en paralelo.
-
----
-
-## 📖 Cómo Usar
-
-### 1. Agregar lugares
-
-1. Ve a la pestaña **📍 Lugares**
-2. Clic en **+ Agregar Lugar**
-3. Ingresá nombre y tags opcionales (separados por coma: `parrilla, económico, rápido`)
-4. Clic en **Crear**
-
-### 2. Girar la ruleta
-
-1. Ve a la pestaña **🎰 Ruleta**
-2. Clic en **¡GIRAR!**
-3. La rueda gira — el segmento ganador se alinea con la flecha
-4. Si cae en **✨ Nuevo**: pausa breve → segunda tirada automática entre lugares no visitados
-5. Se muestra una tarjeta con el lugar elegido: nombre, tags, rating promedio, gasto promedio
-
-### 3. Registrar una visita
-
-1. Ve a la pestaña **📝 Registrar Visita**
-2. Seleccioná el lugar
-3. Ingresá el gasto y el rating
-4. Clic en **Registrar Visita**
-
-Los datos se persisten inmediatamente en `db.json` vía REST API.
+`npm start` uses `concurrently` to run `ng serve` and `json-server` in parallel.
 
 ---
 
-## ⚖️ Algoritmo de Pesos
+## How It Works
 
-Cada lugar tiene un peso calculado que determina el tamaño de su segmento en la rueda y su probabilidad:
+### 1. Add places
 
-```
-peso = ratingFactor × costFactor × agingFactor
-```
+Go to the **Places** tab → **+ Add Place**. Enter a name and optional comma-separated tags (e.g. `grill, cheap, fast`). Places without any visit history start with a neutral weight of `1.0`.
 
-| Factor | Lógica |
-|---|---|
-| **ratingFactor** | `promedio_rating / 5` — mejor puntuado, más peso |
-| **costFactor** | `1 / (1 + costo_promedio / 1000)` — más barato, más peso |
-| **agingFactor** | `1 + (semanas_sin_visitar × 0.2)` — más tiempo sin ir, más peso |
-| **Sin visitas** | Peso neutral de `1.0` hasta tener historial |
+### 2. Spin the wheel
 
-El **último lugar seleccionado** se excluye siempre de la tirada siguiente.
+Go to the **Roulette** tab → **SPIN**. The wheel spins with a randomised angle weighted by each segment's probability.
 
-### Segmento "✨ Nuevo"
+- If the arrow lands on **✨ New**: a brief pause plays, then a second automatic spin runs among places that have never been visited.
+- If no unvisited places exist, the New spin is cancelled and the state resets.
+- After spinning, a result card shows the selected place: name, tags, average rating, and average spend.
 
-Tiene un peso igual al **promedio** de todos los lugares elegibles. Si la rueda cae ahí:
+### 3. Log a visit
 
-1. Aparece un banner dorado: "Modo Nuevo activado…"
-2. Se hace una segunda tirada entre los lugares con **cero visitas**
-3. Si no hay lugares sin visitar, se cancela y vuelve al estado inicial
+Go to the **Log Visit** tab. Select the place, enter the cost and a rating from 1 to 10, then submit. Data is persisted immediately to `db.json` via the REST API.
+
+### 4. Filter by tag
+
+Use the tag filter on the Roulette tab to narrow the wheel to a specific subset before spinning. The wheel redraws in real time to reflect the active filter.
 
 ---
 
-## 🏗️ Arquitectura
+## Weight Algorithm
+
+Each place has a computed weight that determines its segment size on the wheel and its selection probability:
+
+$$\text{weight} = \text{ratingFactor} \times \text{costFactor} \times \text{agingFactor}$$
+
+| Factor | Formula | Effect |
+|---|---|---|
+| `ratingFactor` | `averageRating / 5` | Higher-rated places get more weight |
+| `costFactor` | `1 / (1 + averageCost / 1000)` | Cheaper places get more weight |
+| `agingFactor` | `1 + (weeksSinceLastVisit × 0.2)` | Places visited longer ago get more weight |
+| No visits yet | — | Neutral weight of `1.0` until history exists |
+
+The last selected place is always excluded from the next spin. Places within their configured cooldown window are also excluded.
+
+### The "✨ New" segment
+
+This segment's weight equals the **average** of all eligible places. Segment colors are assigned using a graph-coloring algorithm on a cycle, guaranteeing no two adjacent segments share the same color regardless of how many places are in the rotation.
+
+---
+
+## Architecture
 
 ```
 src/app/
 ├── models/
-│   └── place.model.ts          # Interfaces: Place, Visit, PlaceWithWeight
+│   └── place.model.ts              # Interfaces: Place, Visit, PlaceWithWeight
 ├── services/
-│   └── places.service.ts       # HttpClient + Signals — fuente de verdad
+│   ├── places.service.ts           # HttpClient + Signals — single source of truth
+│   └── user.service.ts             # User preferences and settings
 └── components/
-    ├── roulette.component.*    # Rueda SVG + máquina de estados SpinState
-    ├── places-manager.component.*  # CRUD de lugares
-    └── visit-logger.component.*    # Formulario de visitas
+    ├── roulette.component.*        # SVG wheel + SpinState state machine
+    ├── places-manager.component.*  # Place CRUD
+    ├── visit-logger.component.*    # Visit form
+    ├── history.component.*         # Visit timeline
+    └── stats.component.*           # Analytics dashboard
 ```
 
-### Stack tecnológico
+### Tech stack
 
-- **Angular 21** — standalone components, `ChangeDetectionStrategy.OnPush`
-- **Signals** — `signal()`, `computed()` para estado reactivo
-- **HttpClient + RxJS** — `forkJoin`, `switchMap`, `tap` para la API REST
-- **Reactive Forms** — con validaciones
-- **json-server** — API REST con persistencia en `db.json`
-- **concurrently** — arranque simultáneo de Angular y json-server
+| Layer | Technology |
+|---|---|
+| Framework | Angular 21 — standalone components, `ChangeDetectionStrategy.OnPush` |
+| State | Signals — `signal()`, `computed()` for reactive state |
+| HTTP | `HttpClient` + RxJS (`forkJoin`, `switchMap`, `tap`) |
+| Forms | Angular Reactive Forms with validators |
+| API | `json-server` v1 — REST API with `db.json` persistence |
+| Dev runner | `concurrently` — starts Angular and json-server together |
+| Containers | Docker multi-stage build — nginx (frontend) + node (API) |
 
-### `db.json` (estructura)
+### Data model (`db.json`)
 
 ```json
 {
@@ -121,10 +123,14 @@ src/app/
     {
       "id": "uuid",
       "name": "La Parrilla",
-      "tags": ["parrilla", "económico"],
-      "visits": [{ "date": "ISO-date", "cost": 1500, "rating": 8 }],
-      "lastVisitDate": "ISO-date",
-      "createdAt": "ISO-date"
+      "tags": ["grill", "cheap"],
+      "visits": [
+        { "date": "2026-01-15T12:00:00.000Z", "cost": 1500, "rating": 8 }
+      ],
+      "lastVisitDate": "2026-01-15T12:00:00.000Z",
+      "createdAt": "2025-11-01T09:00:00.000Z",
+      "blacklistedUntil": null,
+      "cooldownDays": 3
     }
   ],
   "settings": [
@@ -133,82 +139,40 @@ src/app/
 }
 ```
 
----
-
-## 💡 Ideas Futuras
-
-Posibles mejoras ordenadas por impacto:
-
-### Alta prioridad
-- [x] **Blacklist temporal** — "No quiero ir esta semana": excluir un lugar N días sin borrarlo
-- [x] **Filtro por tags antes de girar** — elegir solo entre lugares "económico" o "rápido" según el día
-- [x] **Modo anti-repetición semanal** — no volver al mismo lugar dentro de X días configurables (desde Admin)
-
-### Features de usabilidad
-- [x] **Historial visual** — timeline de visitas con costo y rating
-- [x] **Estadísticas / analytics** — gasto mensual, lugar favorito, rating promedio por tag
-- [ ] **Exportar / importar datos** — backup y restauración del `db.json` desde la UI
-- [ ] **Mapa de lugares** — link a Google Maps para cada lugar
-
-### Features sociales / avanzados
-- [ ] **Compartir la ruleta** — modo multi-usuario, o QR code para usarla con el equipo
-- [ ] **Presupuesto mensual** — alerta cuando el gasto acumulado supera un límite configurado
-- [ ] **Recordatorio de almuerzo** — notificación del navegador a la hora configurada
-- [ ] **Integración con calendario** — deshabilitar la app si hay reunión al mediodía
-- [ ] **Sugerencia de lugar nuevo** — integración con la API de Google Places para descubrir restaurantes cercanos
+`json-server` uses atomic writes (via a temp-file rename) — the API container must have a directory bind mount, not a single-file mount, to allow this.
 
 ---
 
-## 🛠️ Comandos útiles
+## Commands
 
 ```bash
-npm start              # Angular (4200) + json-server (3001) — desarrollo local
-npm run api            # Solo json-server
-ng serve               # Solo Angular
-ng build               # Build de producción
-ng test                # Unit tests con Vitest
+npm start        # Angular (4200) + json-server (3001) — local dev
+npm run api      # json-server only
+ng serve         # Angular only
+ng build         # Production build
+ng test          # Unit tests with Vitest
 ```
 
 ---
 
-## 🐳 Docker
-
-### Desarrollo local con Docker
+## Docker
 
 ```bash
-# Construir y levantar ambos contenedores
+# Build and start both containers
 docker compose up --build
 
-# App disponible en http://localhost
+# App available at http://localhost
 ```
 
-### Servicios
-
-| Servicio | Imagen base | Puerto | Descripción |
+| Service | Base image | Port | Description |
 |---|---|---|---|
-| `web` | nginx:alpine | 80 | Angular compilado + proxy reverso |
-| `api` | node:22-alpine | 3001 | json-server — REST API |
+| `web` | nginx:alpine | 80 | Compiled Angular app + reverse proxy |
+| `api` | node:22-alpine | 3001 | json-server REST API |
 
-nginx actúa de proxy: las llamadas a `/api/*` se redirigen internamente al contenedor `api:3001`, por lo que la app Angular no necesita conocer ninguna URL de backend externa.
-
-Los datos persisten en `./db.json` (bind mount). En AWS se reemplaza por un volumen EFS.
+nginx proxies all `/api/*` requests internally to `api:3001`, so the Angular app never needs to know the backend URL. Data persists via a bind mount on `./db.json`.
 
 ---
 
-## ☁️ Deploy en AWS (ECS Fargate)
+## License
 
-1. **ECR** — Crear dos repositorios y subir las imágenes:
-   ```bash
-   docker build -t almorz-web .
-   docker build -f Dockerfile.api -t almorz-api .
-   # tag + push a ECR...
-   ```
-2. **EFS** — Crear un sistema de archivos para persistir `db.json` y montarlo en la task definition del contenedor `api` en `/app/db.json`.
-3. **ECS Task Definition** — Dos contenedores en la misma task (equivalente al `docker-compose.yml`).
-4. **ALB** — Application Load Balancer apuntando al contenedor `web` (puerto 80).
-
----
-
-## 📝 Licencia
-
-Proyecto de uso personal. Libre para adaptar.
+Personal project. Free to adapt.
