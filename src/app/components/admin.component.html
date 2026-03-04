@@ -34,6 +34,7 @@
 
       @if (userStats().length > 0) {
         <h3>Actividad por usuario</h3>
+        <div class="table-scroll">
         <table class="users-table" aria-label="Estadísticas por usuario">
           <thead>
             <tr>
@@ -54,6 +55,7 @@
             }
           </tbody>
         </table>
+        </div>
       } @else {
         <p class="empty">Todavía no hay visitas registradas.</p>
       }

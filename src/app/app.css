@@ -89,7 +89,9 @@
   cursor: pointer;
   transition: all 0.2s ease;
   text-decoration: none;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 
 .nav-tab:hover {
@@ -108,23 +110,72 @@
   background: #f5f5f5;
 }
 
+/* ── Mobile: bottom navigation bar ──────────────────────────────────────── */
 @media (max-width: 768px) {
+  .app-header {
+    padding: 0.65rem 1rem;
+  }
+
   .app-header h1 {
-    font-size: 1.75rem;
+    font-size: 1.3rem;
   }
 
   .app-subtitle {
-    font-size: 1rem;
+    display: none;
+  }
+
+  .user-chip {
+    padding: 0.25rem 0.6rem;
+  }
+
+  .user-name {
+    font-size: 0.8rem;
   }
 
   .app-nav {
-    flex-wrap: wrap;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: auto;
+    flex-wrap: nowrap;
+    border-top: 1px solid #e0e0e0;
+    box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.1);
+    z-index: 200;
+    background: white;
+    /* iPhone home bar */
+    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 
   .nav-tab {
     flex: 1;
-    min-width: 100px;
-    padding: 1rem;
-    font-size: 0.875rem;
+    min-width: 0;
+    padding: 0.45rem 0.25rem 0.6rem;
+    font-size: 0.62rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.15rem;
+    border-bottom: none;
+    border-top: 3px solid transparent;
+  }
+
+  .nav-tab.active {
+    border-top-color: #667eea;
+    border-bottom-color: transparent;
+  }
+
+  .nav-icon {
+    font-size: 1.35rem;
+    line-height: 1;
+  }
+
+  .nav-label {
+    line-height: 1;
+  }
+
+  /* Push page content above the fixed bottom nav */
+  .app-main {
+    padding-bottom: calc(68px + env(safe-area-inset-bottom, 0px));
   }
 }

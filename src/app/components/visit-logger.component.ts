@@ -1,4 +1,4 @@
-import { Component, signal, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, signal, inject, computed, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PlacesService } from '../services/places.service';
 
@@ -12,7 +12,9 @@ import { PlacesService } from '../services/places.service';
 export class VisitLoggerComponent {
   private readonly placesService = inject(PlacesService);
 
-  protected readonly places = this.placesService.places;
+  protected readonly places = computed(() =>
+    [...this.placesService.places()].sort((a, b) => a.name.localeCompare(b.name, 'es'))
+  );
   protected readonly showSuccess = signal(false);
   protected readonly Math = Math;
 

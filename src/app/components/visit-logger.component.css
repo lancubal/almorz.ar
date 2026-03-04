@@ -4,6 +4,16 @@
   margin: 0 auto;
 }
 
+@media (max-width: 600px) {
+  .visit-logger {
+    padding: 1rem;
+  }
+
+  .form-card {
+    padding: 1.25rem 1rem;
+  }
+}
+
 .visit-logger h2 {
   margin-bottom: 2rem;
   color: #333;

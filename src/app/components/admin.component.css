@@ -128,10 +128,16 @@ button[type='submit']:disabled {
   padding: 0.25rem 0.75rem;
 }
 
+.table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 .users-table {
   border-collapse: collapse;
   font-size: 0.9rem;
   width: 100%;
+  min-width: 360px;
 }
 
 .users-table th,
@@ -301,6 +307,32 @@ button[type='submit']:disabled {
 .badge--ok {
   background: #dcfce7;
   color: #16a34a;
+}
+
+.badge--off {
+  background: #f3f4f6;
+  color: #9ca3af;
+}
+
+@media (max-width: 600px) {
+  .admin-panel {
+    padding: 0.75rem 0.75rem 0;
+  }
+
+  .stats-section,
+  .places-section,
+  .config-section,
+  .weights-section {
+    padding: 1rem;
+  }
+
+  .weight-row {
+    grid-template-columns: minmax(0, 1fr) 80px 44px 24px;
+  }
+
+  .weight-name {
+    font-size: 0.82rem;
+  }
 }
 
 .badge--off {
