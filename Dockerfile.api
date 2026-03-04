@@ -7,8 +7,9 @@ COPY package*.json ./
 RUN npm ci
 
 # Copy the database file as the default seed
-COPY db.json ./
+COPY db.json /srv/almorz/db.json
 
 EXPOSE 3001
 
-CMD ["npx", "json-server", "--watch", "db.json", "--port", "3001", "--host", "0.0.0.0"]
+# Mount /srv/almorz as a directory (not a single file) to allow json-server atomic writes via rename
+CMD ["npx", "json-server", "/srv/almorz/db.json", "--port", "3001", "--host", "0.0.0.0"]

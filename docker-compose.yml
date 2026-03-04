@@ -16,6 +16,5 @@ services:
     ports:
       - "8081:3001"   # el nginx externo hace proxy a este puerto
     volumes:
-      - ./db.json:/app/db.json   # bind mount → datos persisten en el host
-                                  # en AWS: reemplazar por un volumen EFS
+      - ./:/srv/almorz           # mount directory (not file) to allow json-server atomic writes
     restart: unless-stopped
