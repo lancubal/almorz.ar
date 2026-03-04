@@ -25,7 +25,7 @@ h2 {
   display: flex;
   border-radius: 8px;
   overflow: hidden;
-  border: 1.5px solid #667eea;
+  border: 1.5px solid var(--accent, #2563eb);
 }
 
 .toggle-btn {
@@ -33,18 +33,18 @@ h2 {
   font-size: 0.82rem;
   font-weight: 600;
   background: white;
-  color: #667eea;
+  color: var(--accent, #2563eb);
   border: none;
   cursor: pointer;
   transition: background 0.15s, color 0.15s;
 }
 
 .toggle-btn + .toggle-btn {
-  border-left: 1.5px solid #667eea;
+  border-left: 1.5px solid var(--accent, #2563eb);
 }
 
 .toggle-btn--active {
-  background: #667eea;
+  background: var(--accent, #2563eb);
   color: white;
 }
 
@@ -85,7 +85,7 @@ h2 {
 .summary-value {
   font-size: 1.35rem;
   font-weight: 800;
-  color: #667eea;
+  color: var(--accent, #2563eb);
   display: block;
 }
 
@@ -145,7 +145,7 @@ h2 {
 
 .bar-fill {
   width: 100%;
-  background: linear-gradient(to top, #667eea, #9f7aea);
+  background: linear-gradient(to top, var(--accent, #2563eb), #3b82f6);
   border-radius: 4px 4px 0 0;
   transition: height 0.4s ease;
   min-height: 0;
@@ -313,3 +313,4 @@ h2 {
     display: none;
   }
 }
+

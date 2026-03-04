@@ -152,7 +152,9 @@
   font-weight: 600;
   padding: 0.2rem 0.6rem;
   cursor: pointer;
-  transition: background 0.12s, border-color 0.12s;
+  transition:
+    background 0.12s,
+    border-color 0.12s;
   line-height: 1.4;
 }
 
@@ -359,7 +361,9 @@
   font-size: 0.8rem;
   font-weight: 600;
   padding: 0.25rem 0.6rem;
-  transition: background 0.15s, border-color 0.15s;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
 }
 
 .bl-picker button:hover {

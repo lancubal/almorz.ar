@@ -9,6 +9,15 @@
   min-height: 600px;
 }
 
+@media (max-width: 700px) {
+  .roulette-container {
+    min-height: calc(100svh - 110px); /* viewport minus header + bottom nav */
+    justify-content: center;
+    padding: 1rem;
+    gap: 1.25rem;
+  }
+}
+
 /* ─── Empty state ──────────────────────────────────────────────────────────── */
 .empty-state {
   display: flex;
@@ -55,18 +64,20 @@
   font-weight: 600;
   color: #555;
   cursor: pointer;
-  transition: border-color 0.15s, color 0.15s;
+  transition:
+    border-color 0.15s,
+    color 0.15s;
   text-align: left;
 }
 
 .tag-filter-toggle:hover {
-  border-color: #667eea;
-  color: #667eea;
+  border-color: var(--accent, #2563eb);
+  color: var(--accent, #2563eb);
 }
 
 .tag-filter-toggle--active {
-  border-color: #667eea;
-  color: #667eea;
+  border-color: var(--accent, #2563eb);
+  color: var(--accent, #2563eb);
 }
 
 .tag-filter-toggle-icon {
@@ -75,7 +86,7 @@
 
 .tag-filter-badge {
   margin-left: 0.1rem;
-  background: #667eea;
+  background: var(--accent, #2563eb);
   color: white;
   border-radius: 999px;
   font-size: 0.72rem;
@@ -128,19 +139,22 @@
   cursor: pointer;
   padding: 0.45rem 0.85rem;
   text-align: left;
-  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
   line-height: 1.4;
   width: 100%;
 }
 
 .tag-chip:hover:not(.tag-chip--active):not(.tag-chip--clear) {
-  border-color: #667eea;
-  color: #667eea;
+  border-color: var(--accent, #2563eb);
+  color: var(--accent, #2563eb);
 }
 
 .tag-chip--active {
-  background: #667eea;
-  border-color: #667eea;
+  background: var(--accent, #2563eb);
+  border-color: var(--accent, #2563eb);
   color: white;
 }
 
@@ -174,11 +188,11 @@
 .arrow {
   width: 0;
   height: 0;
-  margin: 0 auto; /* center the 0-width triangle within the 36px wrapper */
+  margin: 0 auto;
   border-left: 18px solid transparent;
   border-right: 18px solid transparent;
-  border-top: 36px solid #e53935;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35));
+  border-top: 36px solid #1f2937;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
   position: relative;
   z-index: 10;
 }
@@ -471,7 +485,7 @@
 }
 
 .user-stat-name--me {
-  color: #667eea;
+  color: var(--accent, #2563eb);
 }
 
 .user-stat-bar-track {
@@ -526,8 +540,8 @@
   /* On narrow screens, put the filter toggle back into normal flow above the wheel */
   .tag-filter-wrapper {
     position: relative;
-    left: auto;  /* reset the desktop left: 1rem that was shifting it right */
-    top: auto;   /* reset the desktop top: 1.75rem */
+    left: auto; /* reset the desktop left: 1rem that was shifting it right */
+    top: auto; /* reset the desktop top: 1.75rem */
     align-self: center;
     width: min(260px, calc(100% - 2rem));
     margin-top: -1rem;

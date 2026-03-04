@@ -1,28 +1,19 @@
-@if (!isUnlocked()) {
+@if(!isUnlocked()) {
   <div class="pin-gate">
     <div class="pin-card">
       <h2>Área Admin</h2>
       <p class="hint">Ingresá el PIN para continuar.</p>
       <label for="pin-input" class="visually-hidden">PIN de administrador</label>
-      <input
-        id="pin-input"
-        type="password"
-        inputmode="numeric"
-        maxlength="8"
-        placeholder="PIN"
-        [formControl]="pinCtrl"
-        autocomplete="current-password"
-        aria-describedby="pin-error"
-        [attr.aria-invalid]="pinError() ? 'true' : null"
-        (keydown.enter)="submitPin()"
-      />
-      @if (pinError()) {
+      <input id="pin-input" type="password" inputmode="numeric" maxlength="8" placeholder="PIN" [formControl]="pinCtrl"
+        autocomplete="current-password" aria-describedby="pin-error" [attr.aria-invalid]="pinError() ? 'true' : null"
+        (keydown.enter)="submitPin()" />
+      @if(pinError()) {
         <p id="pin-error" class="error" role="alert">PIN incorrecto.</p>
-      }
-      <button type="button" [disabled]="pinCtrl.invalid" (click)="submitPin()">Entrar</button>
+        }
+        <button type="button" [disabled]="pinCtrl.invalid" (click)="submitPin()">Entrar</button>
     </div>
   </div>
-} @else {
+  } @else {
   <div class="admin-panel">
 
     <section class="stats-section" aria-label="Resumen global">
@@ -32,33 +23,35 @@
         <span class="chip">{{ totalVisits() }} visitas en total</span>
       </div>
 
-      @if (userStats().length > 0) {
+      @if(userStats().length > 0) {
         <h3>Actividad por usuario</h3>
         <div class="table-scroll">
-        <table class="users-table" aria-label="Estadísticas por usuario">
-          <thead>
-            <tr>
-              <th scope="col">Usuario</th>
-              <th scope="col">Visitas</th>
-              <th scope="col">Costo prom.</th>
-              <th scope="col">Rating prom.</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (u of userStats(); track u.displayName) {
+          <table class="users-table" aria-label="Estadísticas por usuario">
+            <thead>
               <tr>
-                <td>{{ u.displayName }}</td>
-                <td>{{ u.visits }}</td>
-                <td>{{ u.avgCost | currency:'ARS':'symbol':'1.0-0':'es-AR' }}</td>
-                <td>{{ u.avgRating }}</td>
+                <th scope="col">Usuario</th>
+                <th scope="col">Visitas</th>
+                <th scope="col">Costo prom.</th>
+                <th scope="col">Rating prom.</th>
               </tr>
-            }
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              @for(u of userStats(); track u.displayName) {
+                <tr>
+                  <td>{{ u.displayName }}</td>
+                  <td>{{ u.visits }}</td>
+                  <td>
+                    {{ u.avgCost | currency:'ARS':'symbol':'1.0-0':'es-AR' }}
+                  </td>
+                  <td>{{ u.avgRating }}</td>
+                </tr>
+                }
+            </tbody>
+          </table>
         </div>
-      } @else {
+        } @else {
         <p class="empty">Todavía no hay visitas registradas.</p>
-      }
+        }
     </section>
 
     <section class="config-section" aria-label="Configuración de la ruleta">
@@ -70,16 +63,12 @@
           <span class="config-hint">Excluir lugares visitados en los últimos N días</span>
         </div>
         <div class="days-selector" role="group" aria-label="Días sin repetir">
-          @for (opt of antiRepeatOptions; track opt) {
-            <button
-              type="button"
-              class="day-btn"
-              [class.day-btn--active]="antiRepeatDays() === opt"
-              [attr.aria-pressed]="antiRepeatDays() === opt"
-              (click)="setAntiRepeatDays(opt)">
+          @for(opt of antiRepeatOptions; track opt) {
+            <button type="button" class="day-btn" [class.day-btn--active]="antiRepeatDays() === opt"
+              [attr.aria-pressed]="antiRepeatDays() === opt" (click)="setAntiRepeatDays(opt)">
               {{ opt === 0 ? 'Off' : opt + 'd' }}
             </button>
-          }
+            }
         </div>
       </div>
     </section>
@@ -89,7 +78,7 @@
       <p class="weights-hint">Probabilidad relativa de cada lugar en la próxima tirada. Los excluidos no aparecerán.</p>
 
       <div class="weights-list">
-        @for (place of weightedPlaces(); track place.id) {
+        @for(place of weightedPlaces(); track place.id) {
           <div class="weight-row" [class.weight-row--excluded]="!eligibleIds().has(place.id)">
             <div class="weight-name" [title]="place.name">{{ place.name }}</div>
             <div class="weight-bar-track" aria-hidden="true">
@@ -97,14 +86,14 @@
             </div>
             <div class="weight-value">{{ place.weight.toFixed(2) }}</div>
             <div class="weight-status">
-              @if (eligibleIds().has(place.id)) {
+              @if(eligibleIds().has(place.id)) {
                 <span class="badge badge--ok">✓</span>
-              } @else {
+                } @else {
                 <span class="badge badge--off">–</span>
-              }
+                }
             </div>
           </div>
-        }
+          }
       </div>
     </section>
 
@@ -114,4 +103,4 @@
     </section>
 
   </div>
-}
+  }

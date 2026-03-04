@@ -4,12 +4,24 @@ import { UserService } from '../services/user.service';
 import { PlaceWithWeight } from '../models/place.model';
 
 const COLORS = [
-  '#E57373', '#64B5F6', '#81C784', '#FFB74D', '#BA68C8',
-  '#4DB6AC', '#F06292', '#4FC3F7', '#A5D6A7', '#FFF176',
-  '#FF8A65', '#90CAF9', '#80DEEA', '#CE93D8', '#FFCC02',
+  '#2563eb', // blue
+  '#dc2626', // red
+  '#059669', // emerald
+  '#7c3aed', // violet
+  '#d97706', // amber
+  '#0891b2', // cyan
+  '#db2777', // pink
+  '#374151', // slate
+  '#65a30d', // lime
+  '#9333ea', // purple
+  '#c2410c', // orange
+  '#0d9488', // teal
+  '#be185d', // rose
+  '#4338ca', // indigo
+  '#92400e', // brown
 ];
 
-const NUEVO_COLOR = '#FFD700';
+const NUEVO_COLOR = '#f59e0b';
 const SPIN_DURATION_MS = 3500;
 const NUEVO_PAUSE_MS = 1500;
 
