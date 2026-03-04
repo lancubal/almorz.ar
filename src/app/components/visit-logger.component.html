@@ -42,19 +42,13 @@
               @if(visitForm.value.rating; as rating) {
                 <div class="rating-display">
                   <span class="rating-number">{{ rating }}</span>
-                  <span
-                    class="rating-stars">{{ '⭐'.repeat(Math.ceil(rating / 2)) }}</span>
+                  <span class="rating-stars">{{ '⭐'.repeat(Math.ceil(rating / 2)) }}</span>
                 </div>
                 } @else {
                 <div class="rating-display">
                   <span class="rating-placeholder">Desliza para calificar</span>
                 </div>
                 }
-            </div>
-            <div class="rating-labels">
-              <span>1 - Malo</span>
-              <span>5 - Regular</span>
-              <span>10 - Excelente</span>
             </div>
           </div>
 

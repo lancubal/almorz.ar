@@ -3,25 +3,36 @@ import { PlacesService } from '../services/places.service';
 import { UserService } from '../services/user.service';
 import { PlaceWithWeight } from '../models/place.model';
 
+// Three shades: bright blue, dark slate, medium slate.
+// Feels like a 2-tone palette but a 3rd shade prevents adjacent-same-color
+// on any segment count (graph coloring on a cycle requires ≥3 colors).
 const COLORS = [
   '#2563eb', // blue
-  '#dc2626', // red
-  '#059669', // emerald
-  '#7c3aed', // violet
-  '#d97706', // amber
-  '#0891b2', // cyan
-  '#db2777', // pink
-  '#374151', // slate
-  '#65a30d', // lime
-  '#9333ea', // purple
-  '#c2410c', // orange
-  '#0d9488', // teal
-  '#be185d', // rose
-  '#4338ca', // indigo
-  '#92400e', // brown
+  '#1e293b', // dark slate
+  '#475569', // medium slate
 ];
 
 const NUEVO_COLOR = '#f59e0b';
+
+/**
+ * Assigns color indices to n segments arranged in a cycle such that no two
+ * adjacent segments (including last→first wrap-around) share the same index.
+ * Works for any n ≥ 1 with COLORS.length ≥ 3.
+ */
+function assignCycleColors(n: number): number[] {
+  const result: number[] = [];
+  for (let i = 0; i < n; i++) {
+    const prevColor = i > 0 ? result[i - 1] : -1;
+    const firstColor = i === n - 1 ? result[0] : -1;
+    for (let c = 0; c < COLORS.length; c++) {
+      if (c !== prevColor && c !== firstColor) {
+        result.push(c);
+        break;
+      }
+    }
+  }
+  return result;
+}
 const SPIN_DURATION_MS = 3500;
 const NUEVO_PAUSE_MS = 1500;
 
@@ -103,6 +114,7 @@ export class RouletteComponent {
     ];
 
     const totalWeight = entries.reduce((s, e) => s + e.weight, 0);
+    const colorIndices = assignCycleColors(entries.length);
     const cx = 200, cy = 200, r = 188;
     let currentAngle = 0;
 
@@ -131,7 +143,7 @@ export class RouletteComponent {
       return {
         id: entry.id,
         label,
-        color: entry.isNuevo ? NUEVO_COLOR : COLORS[i % COLORS.length],
+        color: entry.isNuevo ? NUEVO_COLOR : COLORS[colorIndices[i]],
         path,
         textX,
         textY,
