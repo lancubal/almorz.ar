@@ -2,8 +2,9 @@ import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, of, tap } from 'rxjs';
 import { User } from '../models/place.model';
+import { environment } from '../../environments/environment';
 
-const API = 'http://localhost:3001';
+const API = environment.apiBase;
 const STORAGE_KEY = 'almorz-userId';
 
 @Injectable({ providedIn: 'root' })
